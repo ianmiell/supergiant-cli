@@ -1,13 +1,13 @@
 [![GoReportCard Widget]][GoReportCard] [![GoDoc Widget]][GoDoc] [![Travis Widget]][Travis] [![Coverage Status Widget]][Coverage Status]
 
-[GoReportCard Widget]: https://goreportcard.com/badge/github.com/supergiant/guber
-[GoReportCard]: https://goreportcard.com/report/github.com/supergiant/guber
-[GoDoc]: https://godoc.org/github.com/supergiant/guber
-[GoDoc Widget]: https://godoc.org/github.com/supergiant/guber?status.svg
-[Travis]: https://travis-ci.org/supergiant/guber
-[Travis Widget]: https://travis-ci.org/supergiant/guber.svg?branch=master
-[Coverage Status]: https://coveralls.io/github/supergiant/guber?branch=master
-[Coverage Status Widget]: https://coveralls.io/repos/github/supergiant/guber/badge.svg?branch=master
+[GoReportCard Widget]: https://goreportcard.com/badge/github.com/supergiant/supergiant-cli
+[GoReportCard]: https://goreportcard.com/report/github.com/supergiant/supergiant-cli
+[GoDoc]: https://godoc.org/github.com/supergiant/supergiant-cli
+[GoDoc Widget]: https://godoc.org/github.com/supergiant/supergiant-cli?status.svg
+[Travis]: https://travis-ci.org/supergiant/supergiant-cli
+[Travis Widget]: https://travis-ci.org/supergiant/supergiant-cli.svg?branch=master
+[Coverage Status]: https://coveralls.io/github/supergiant/supergiant-cli?branch=master
+[Coverage Status Widget]: https://coveralls.io/repos/github/supergiant/supergiant-cli/badge.svg?branch=master
 
 
 # supergiant-cli
