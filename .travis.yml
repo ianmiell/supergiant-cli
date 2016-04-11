@@ -1,0 +1,26 @@
+sudo: required
+services:
+- docker
+language: go
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::8}
+go:
+- 1.6
+install:
+- go get -t -v ./...
+- go get github.com/mattn/goveralls
+- go get golang.org/x/tools/cmd/cover
+- go get github.com/tcnksm/ghr
+- go get github.com/mitchellh/gox
+- gox -build-toolchain
+script:
+- "$HOME/gopath/bin/goveralls -service=travis-ci"
+- go test -v ./...
+after_success:
+- gox -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}"
+- ghr --username tcnksm-sample --token $GITHUB_TOKEN --replace --prerelease --debug pre-release dist/
+
+notifications:
+  slack:
+    secure: IKhFFwFltywKl0Io17+msdEaWxHCoY36TNfAMLpMaH1pharTW2dxrlfSQFPnIlPZ1r9On0EVO5UPm7/J1TR8LhHRMrMSgdc1IJlZ1WGEYRx9FEAA0+TXFAf3mNAO9XS8mEgNZIEIBehvi6e3YcQlE6ccWBdocFUo+5OFdxH3Q5aLGJ4Mp0tzJrFlghc2W/0Z10iGem3rKx4Dm33jx0HTLU8eq9VWcm3nz0PWCVeiZZ/DPLkIXzXKbfepzGUiTyF83jIMEu9o79n9ZjeKnu7xUkOhgYY0xg+3vl2D311PhF7kL4PF2i2hvkwDbIBKwj3/U9koFxcA7YyTHS9Mt7Qt3hflvENwg64n4FLoL3jijBFil3vvjLovKB0vQXV1QUWSW1TdGfs/s35DZiUfdU6N0jSYn3P1EpsOFKQC+nMVFp6Sao1a2tWrimg7WSyP56NLa8SfMvd0XPyNH/nGcrTLZnTIZRBX5MCt6EUjFlgtr3Pyp7XJAtXhTg77GNBMB3+BAINTKCUYDmZRoReAfkhCSf4jOdSwhEmk8iK6ijYAfl4qBhIJKoLd1PIKCoCT1n99/hotRFI502b8ff0C/XQV1u9YBpFfSgk2o04NASJSBNMKnpwCAnt88Z5mFcSsVSWNTaQk8XsArp1nIWVn9EzVspvoEQT6AVR4/vQDw6sIkAk=

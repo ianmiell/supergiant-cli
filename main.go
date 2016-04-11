@@ -11,7 +11,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "supergiant-cli"
 	app.Usage = "Powerful control over your supergiants."
-	app.Version = "0.0.1"
+	app.Version = Version
 	app.Commands = []cli.Command{
 		cmd.Create(),
 		cmd.Get(),
