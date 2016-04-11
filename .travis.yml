@@ -16,9 +16,9 @@ install:
 script:
 - "$HOME/gopath/bin/goveralls -service=travis-ci"
 - go test -v ./...
-after_success:
 - gox -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}"
-- ghr --username tcnksm-sample --token $GITHUB_TOKEN --replace --prerelease --debug pre-release dist/
+after_success:
+- hack/ghr.sh
 
 notifications:
   slack:
