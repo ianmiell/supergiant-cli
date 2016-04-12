@@ -2,8 +2,9 @@ package spacetime
 
 import (
 	"os"
-	"os/user"
 	"testing"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 func TestGetConfigFileTest(t *testing.T) { //
@@ -22,12 +23,12 @@ func TestGetConfigFileTest(t *testing.T) { //
 }
 func TestGetConfigFileProd(t *testing.T) {
 
-	user, err := user.Current()
+	home, err := homedir.Dir()
 	if err != nil {
 		panic(err)
 	}
 
-	sgdir := "" + user.HomeDir + "/.supergiant"
+	sgdir := "" + home + "/.supergiant"
 	sgconfig := "" + sgdir + "/sgconfig.json"
 
 	fileString := getConfigFile() //

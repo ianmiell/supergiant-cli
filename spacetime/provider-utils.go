@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"os/user"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 // get the spacetime db file.
 func getProviderConfigFile() string {
 
 	// get the current user.
-	user, err := user.Current()
+	home, err := homedir.Dir()
 	if err != nil {
 		panic(err)
 	}
@@ -23,7 +24,7 @@ func getProviderConfigFile() string {
 		sgdir = "/tmp/.supergiant"
 		sgconfig = "" + sgdir + "/provider.json"
 	} else {
-		sgdir = "" + user.HomeDir + "/.supergiant"
+		sgdir = "" + home + "/.supergiant"
 		sgconfig = "" + sgdir + "/provider.json"
 	}
 

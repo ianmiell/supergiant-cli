@@ -6,11 +6,11 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"os/user"
 	"strings"
 	"time"
 
 	"github.com/google/go-github/github"
+	"github.com/mitchellh/go-homedir"
 )
 
 // Grab assets from git.
@@ -43,15 +43,14 @@ func terraformINIT(version string, root string) error {
 
 // Verifies a provider is good to go by creating some enviromental requirments for supergiant.
 func (provider *ProviderConfig) init(verbose bool) error {
-	// get the current user.
-	user, err := user.Current()
+	home, err := homedir.Dir()
 	if err != nil {
 		return err
 	}
 
 	// Setup a state dir.
-	terraStateDir := "" + user.HomeDir + "/.supergiant/terraform-states/" + provider.Name + ""
-	sgroot := "" + user.HomeDir + "/.supergiant"
+	terraStateDir := "" + home + "/.supergiant/terraform-states/" + provider.Name + ""
+	sgroot := "" + home + "/.supergiant"
 
 	// Make sure terra assets are in place.
 	err = terraformINIT("latest", sgroot)
@@ -155,14 +154,13 @@ func (provider *ProviderConfig) init(verbose bool) error {
 }
 
 func (kube *Kube) init(verbose bool) error {
-	// get the current user.
-	user, err := user.Current()
+	home, err := homedir.Dir()
 	if err != nil {
 		kube.fail()
 		return err
 	}
-	terraStateDir := "" + user.HomeDir + "/.supergiant/terraform-states/" + kube.Name + ""
-	sgroot := "" + user.HomeDir + "/.supergiant"
+	terraStateDir := "" + home + "/.supergiant/terraform-states/" + kube.Name + ""
+	sgroot := "" + home + "/.supergiant"
 
 	err = terraformINIT("latest", sgroot)
 	if err != nil {
@@ -287,12 +285,12 @@ func (kube *Kube) init(verbose bool) error {
 }
 func (kube *Kube) destroy(verbose bool) error {
 
-	// get the current user.
-	user, err := user.Current()
+	home, err := homedir.Dir()
 	if err != nil {
+		kube.fail()
 		return err
 	}
-	terraStateDir := "" + user.HomeDir + "/.supergiant/terraform-states/" + kube.Name + ""
+	terraStateDir := "" + home + "/.supergiant/terraform-states/" + kube.Name + ""
 
 	_, err = os.Stat(terraStateDir)
 	if os.IsNotExist(err) {
