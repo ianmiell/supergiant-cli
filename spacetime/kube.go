@@ -147,9 +147,9 @@ func SetDefaultKube(name string) error {
 	oldSelected, err := GetDefaultKube()
 	if err != nil {
 		// if no old selected.
-		kube, err := GetKube(name)
-		if err != nil {
-			return err
+		kube, gerr := GetKube(name)
+		if gerr != nil {
+			return gerr
 		}
 		kube.Selected = true
 		err = kube.Update()

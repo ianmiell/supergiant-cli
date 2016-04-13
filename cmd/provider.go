@@ -39,7 +39,7 @@ func providerCreate() cli.Command {
 				required(c, "access-key", "AWS Access Key"),
 				required(c, "secret-key", "AWS Secret Key"),
 				required(c, "provider-service", "Host Service"),
-				c.Bool("verbose"),
+				true,
 			)
 			if err != nil {
 				fmt.Println("ERROR:", err)
@@ -108,6 +108,7 @@ func providerDestroy() cli.Command {
 				fmt.Println("ERROR:", err)
 				os.Exit(5)
 			}
+			fmt.Println("Success...")
 		},
 	}
 

@@ -48,9 +48,18 @@ func (provider *ProviderConfig) init(verbose bool) error {
 		return err
 	}
 
-	// Setup a state dir.
-	terraStateDir := "" + home + "/.supergiant/terraform-states/" + provider.Name + ""
-	sgroot := "" + home + "/.supergiant"
+	// based on user data or test flag declare the config file.
+	var terraStateDir string
+	var sgroot string
+	if testMode() {
+		// Setup a state dir.
+		terraStateDir = "/tmp/.supergiant/terraform-states/providers/" + provider.Name + ""
+		sgroot = "/tmp/.supergiant"
+	} else {
+		// Setup a state dir.
+		terraStateDir = "" + home + "/.supergiant/terraform-states/providers/" + provider.Name + ""
+		sgroot = "" + home + "/.supergiant"
+	}
 
 	// Make sure terra assets are in place.
 	err = terraformINIT("latest", sgroot)
@@ -94,11 +103,6 @@ func (provider *ProviderConfig) init(verbose bool) error {
 	stdOutPipe, _ := cmd.StdoutPipe()
 	stdErrPipe, _ := cmd.StderrPipe()
 
-	//	if verbose {
-	//		cmd.Stdout = os.Stdout
-	//		cmd.Stderr = os.Stderr
-	//	}
-
 	err = cmd.Start()
 	if err != nil {
 		return err
@@ -106,11 +110,6 @@ func (provider *ProviderConfig) init(verbose bool) error {
 
 	scanout := bufio.NewScanner(stdOutPipe)
 	scanerr := bufio.NewScanner(stdErrPipe)
-
-	//	go io.Copy(logger, stdOutPipe)
-	//	go io.Copy(logger, stdErrPipe)
-
-	// I am going it this way instead of sending directoy to STDOUT so I have the abioity to parse output.
 
 	for scanout.Scan() {
 		fmt.Fprintln(logger, scanout.Text())
@@ -137,7 +136,7 @@ func (provider *ProviderConfig) init(verbose bool) error {
 			provider.Status = "Verified"
 			provider.update()
 			if verbose {
-				fmt.Println("Resource already exists...")
+				fmt.Println("Provider required resources already exist. Ignore Errors here...")
 			}
 			return nil
 		}
@@ -150,6 +149,20 @@ func (provider *ProviderConfig) init(verbose bool) error {
 		fmt.Println("Terraform build completed successfully...")
 	}
 
+	return nil
+}
+
+func (provider *ProviderConfig) destroy(verbose bool) error {
+	home, err := homedir.Dir()
+	if err != nil {
+		return err
+	}
+	terraStateDir := "" + home + "/.supergiant/terraform-states/providers/" + provider.Name + "/"
+
+	err = os.RemoveAll(terraStateDir)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

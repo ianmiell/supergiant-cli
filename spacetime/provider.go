@@ -116,11 +116,22 @@ func DeleteProvider(name string) error {
 	if err != nil {
 		return err
 	}
-
+	// fetch the provider object.
+	provider, err := providerConfigs.get(name)
+	if err != nil {
+		return err
+	}
+	//destroy the state files (We do not currently terraform destroy provider resources for safty reasons.)
+	err = provider.destroy(true)
+	if err != nil {
+		return err
+	}
+	// delete record from provider db
 	err = providerConfigs.deleteProviderRecord(name)
 	if err != nil {
 		return err
 	}
+	// write to the db.
 	err = providerConfigs.writeProviderConfig()
 	if err != nil {
 		return err

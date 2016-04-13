@@ -1,6 +1,7 @@
 #!/bin/bash
 VERSION=$(tail -1 version.go | awk '{print $5}' | sed 's/"//g')
-if [[ -z "$TRAVIS_TAG" && "$TRAVIS_BRANCH" == "master" ]]; then
+STABLE=$(tail -1 version.go | awk '{print $5}' | sed 's/"//g' | cut -f1 -d"-")
+if [[ ! -z "$TRAVIS_TAG" && "$STABLE" != "$VERSION" ]]; then
   echo "Releasing supergiant-cli version: ${VERSION}, pre-release"
   ghr --username supergiant --token $GITHUB_TOKEN --replace --prerelease --debug unstable-$VERSION dist/
   exit 0
