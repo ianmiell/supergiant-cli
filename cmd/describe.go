@@ -14,7 +14,7 @@ func Describe() cli.Command {
 	command := cli.Command{
 		Name:    "describe",
 		Aliases: []string{"d"},
-		Usage:   "Supergiant core application control.",
+		Usage:   "Describe a Supergiant resource.",
 		Subcommands: []cli.Command{
 
 			// Describe Subcommands

@@ -16,7 +16,7 @@ func Create() cli.Command {
 	command := cli.Command{
 		Name:    "create",
 		Aliases: []string{"c"},
-		Usage:   "Supergiant core application control.",
+		Usage:   "Create a Supergiant resource.",
 		Subcommands: []cli.Command{
 
 			// Create Subcommands

@@ -16,7 +16,7 @@ func Delete() cli.Command {
 	command := cli.Command{
 		Name:    "delete",
 		Aliases: []string{"d"},
-		Usage:   "Supergiant core application control.",
+		Usage:   "Delete a Supergiant resource.",
 		Subcommands: []cli.Command{
 
 			// Delete Subcommands

@@ -11,7 +11,7 @@ func spacetimeInport() cli.Command {
 
 	command := cli.Command{
 		Name:  "import",
-		Usage: "Destroy a spacetime provider. Will fail if provider in use.",
+		Usage: "Import an already existing kubernetes cluster into spacetime.",
 		Action: func(c *cli.Context) {
 			var provider string
 			if c.String("provider") == "" {

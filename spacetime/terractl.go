@@ -103,6 +103,7 @@ func (provider *ProviderConfig) init(verbose bool) error {
 	stdOutPipe, _ := cmd.StdoutPipe()
 	stdErrPipe, _ := cmd.StderrPipe()
 
+	fmt.Println("Verifying your credentials...")
 	err = cmd.Start()
 	if err != nil {
 		return err
@@ -275,20 +276,22 @@ func (kube *Kube) init(verbose bool) error {
 	kube.Update()
 
 	// tesing that we are able to reach the cluster with guber.
-
-	for i := 0; i < 5; i++ {
+	fmt.Println("Checking that Kubernetes is up and running properly...")
+	for i := 0; i < 200; i++ {
 		if verbose {
 			fmt.Println("Check for life poll...", i)
 		}
 		err = checkForLife(kube.IP, kube.User, kube.Pass)
 		if err != nil {
-			time.Sleep(200 * time.Second)
+			time.Sleep(5 * time.Second)
 		} else {
+			fmt.Println("Check for life error.")
 			kube.fail()
 			break
 		}
 	}
 	if err != nil {
+		fmt.Println("Check for life has failed.")
 		kube.fail()
 		return err
 	}

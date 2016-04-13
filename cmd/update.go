@@ -14,7 +14,7 @@ func Update() cli.Command {
 	command := cli.Command{
 		Name:    "update",
 		Aliases: []string{"u", "upgrade"},
-		Usage:   "Update a supergiant resource.",
+		Usage:   "Update a Supergiant resource.",
 		Subcommands: []cli.Command{
 			// Update Subcommands
 			// Update Comp

@@ -13,9 +13,9 @@ import (
 //
 func Get() cli.Command {
 	command := cli.Command{
-		Name:    "get",
+		Name:    "list",
 		Aliases: []string{"c"},
-		Usage:   "Supergiant core application control.",
+		Usage:   "List a Supergiant resource.",
 		Subcommands: []cli.Command{
 
 			// Get Subcommands
