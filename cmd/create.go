@@ -51,7 +51,7 @@ func Create() cli.Command {
 				Action: func(c *cli.Context) {
 					err := apictl.CreateComponent(
 						c.Args().First(), // Component Name
-						c.String("app"),  // App name
+						getApp(c),        // App name
 					)
 					if err != nil {
 						fmt.Println("ERROR:", err)
@@ -100,6 +100,7 @@ func Create() cli.Command {
 							fmt.Println("ERROR:", err)
 							os.Exit(5)
 						}
+						fmt.Println("Success...")
 						os.Exit(0)
 					}
 
@@ -117,7 +118,7 @@ func Create() cli.Command {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
 					}
-
+					fmt.Println("Success...")
 				},
 				Flags: []cli.Flag{
 					cli.StringFlag{

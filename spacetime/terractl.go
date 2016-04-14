@@ -285,8 +285,7 @@ func (kube *Kube) init(verbose bool) error {
 		if err != nil {
 			time.Sleep(5 * time.Second)
 		} else {
-			fmt.Println("Check for life error.")
-			kube.fail()
+			fmt.Println("Kubernetes verified...")
 			break
 		}
 	}

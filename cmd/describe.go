@@ -50,8 +50,8 @@ func Describe() cli.Command {
 				},
 				Action: func(c *cli.Context) {
 					err := apictl.ComponentDetails(
-						required(c, "app", "Application Name"),
-						required(c, "comp", "Component Name"),
+						getApp(c),
+						getComp(c),
 					)
 					if err != nil {
 						fmt.Println("ERROR:", err)

@@ -39,6 +39,7 @@ func containerCreate() cli.Command {
 				fmt.Println("ERROR:", err)
 				os.Exit(5)
 			}
+			fmt.Println("Success...")
 		},
 		Flags: []cli.Flag{
 			cli.StringFlag{
@@ -182,6 +183,7 @@ func containerDelete() cli.Command {
 				fmt.Println("ERROR:", err)
 				os.Exit(5)
 			}
+			fmt.Println("Success...")
 		},
 		Flags: []cli.Flag{
 			cli.StringFlag{

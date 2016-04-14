@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+
 	app := cli.NewApp()
 	app.Name = "supergiant-cli"
 	app.Usage = "Powerful control over your supergiants."

@@ -30,6 +30,10 @@ func CreateContainer(r *client.ReleaseResource, containerName string, image stri
 		return err
 	}
 
+	if helloWorldExist(r) {
+		DeleteContainer(r, "Hello World")
+	}
+
 	return nil
 }
 
@@ -72,16 +76,20 @@ func UpdateContainer(r *client.ReleaseResource, containerName string, image stri
 
 // DeleteContainer creates a new Container for a resource.
 func DeleteContainer(r *client.ReleaseResource, name string) error {
-
+	success := false
 	if len(r.Containers) == 0 {
 		return errors.New("This Component has not Containers.")
 	}
+
 	for i, container := range r.Containers {
 		if container.Name == name {
 			r.Containers = append(r.Containers[:i], r.Containers[i+1:]...)
-		} else {
-			return errors.New("Container not found.")
+			success = true
 		}
+	}
+
+	if !success {
+		return errors.New("Container not found.")
 	}
 
 	_, err := r.Save()
@@ -90,4 +98,17 @@ func DeleteContainer(r *client.ReleaseResource, name string) error {
 	}
 
 	return nil
+}
+
+func helloWorldExist(r *client.ReleaseResource) bool {
+	if len(r.Containers) == 0 {
+		return false
+	}
+
+	for _, container := range r.Containers {
+		if container.Name == "Hello World" {
+			return true
+		}
+	}
+	return false
 }

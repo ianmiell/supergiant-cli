@@ -152,6 +152,21 @@ Provider Details:
 
 }
 
+func GetProvider(name string) (*ProviderConfig, error) {
+	// get providers
+	providers, err := loadProviderConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, provider := range providers.ProviderConfigs {
+		if provider.Name == name {
+			return &provider, nil
+		}
+	}
+	return nil, errors.New("Provider not found.")
+}
+
 func (p *ProviderConfigs) get(name string) (*ProviderConfig, error) {
 	for _, provider := range p.ProviderConfigs {
 		if provider.Name == name {

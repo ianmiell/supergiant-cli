@@ -48,6 +48,7 @@ func GetComponent(compName string, appName string) (*client.ComponentResource, e
 // CreateComponent creates a new component
 func CreateComponent(compName string, appName string) error {
 	// Get app
+	fmt.Println("APP:", appName)
 	app, err := GetApp(appName)
 	if err != nil {
 		return commonErrorParse(err, "Application Get, "+appName+"")
@@ -59,7 +60,8 @@ func CreateComponent(compName string, appName string) error {
 	//create the comp
 	newComp, err := app.Components().Create(comp)
 	if err != nil {
-		return commonErrorParse(err, "Component Create, "+*comp.Name+"")
+		return err
+		//return commonErrorParse(err, "Component Create, "+*comp.Name+"")
 	}
 	// mock release
 	release := releaseBoiler

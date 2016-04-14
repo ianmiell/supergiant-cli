@@ -3,7 +3,6 @@ package apictl
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"text/tabwriter"
 
 	"github.com/supergiant/supergiant/client"
@@ -78,17 +77,17 @@ func ListEntryPoints(name string) error {
 		if entrypoint.Domain == nil {
 			entrypointDomain = noData
 		}
-		entrypointUpdated := entrypoint.Updated.String()
-		if entrypointUpdated == "" {
-			entrypointUpdated = noData
-		}
-		entrypointComps, err := getEntrypointComps(entrypointDomain)
-		if err != nil {
-			return err
-		}
-		entrypointCompCount := strconv.Itoa(len(entrypointComps))
+		//entrypointUpdated := entrypoint.Updated.String()
+		//if entrypointUpdated == "" {
+		//	entrypointUpdated = noData
+		//}
+		//entrypointComps, err := getEntrypointComps(entrypointDomain)
+		//if err != nil {
+		//	return err
+		//}
+		//entrypointCompCount := strconv.Itoa(len(entrypointComps))
 
-		fmt.Fprintln(w, ""+entrypointDomain+"\t"+entrypointAddress+"\t"+entrypointCompCount+"\tUnknown\t"+entrypointCreated+"\t"+entrypointUpdated+"\t")
+		fmt.Fprintln(w, ""+entrypointDomain+"\t"+entrypointAddress+"\t0\tUnknown\t"+entrypointCreated+"\tUnknown\t")
 	}
 	w.Flush()
 	return nil

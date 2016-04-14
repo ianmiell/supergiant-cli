@@ -48,7 +48,10 @@ func Delete() cli.Command {
 					containerDelete(),
 				},
 				Action: func(c *cli.Context) {
-					err := apictl.DestroyComponent(c.Args().First(), required(c, "app", "Supergiant App Name"))
+					err := apictl.DestroyComponent(
+						c.Args().First(),
+						getApp(c),
+					)
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)

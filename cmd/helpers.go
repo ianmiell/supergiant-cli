@@ -36,3 +36,30 @@ func context(contextType string) (string, error) {
 	}
 	return "", errors.New("Context Not Set.")
 }
+
+func getApp(c *cli.Context) string {
+	var appName string
+	args := c.Args().Tail()
+	for i, arg := range args {
+		if arg == "--app" {
+			appName = args[i+1]
+		}
+	}
+	if appName == "" {
+		appName = required(c, "app", "Application Name")
+	}
+	return appName
+}
+func getComp(c *cli.Context) string {
+	var comp string
+	args := c.Args().Tail()
+	for i, arg := range args {
+		if arg == "--comp" {
+			comp = args[i+1]
+		}
+	}
+	if comp == "" {
+		comp = required(c, "comp", "Component Name")
+	}
+	return comp
+}

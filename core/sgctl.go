@@ -8,7 +8,12 @@ import (
 func initSGAPI(c *guber.Client, k *spacetime.Kube, version string) error {
 	// The default core version.
 	if version == "" {
-		version = "v0.4.1"
+		version = "v0.4.3"
+	}
+
+	provider, err := spacetime.GetProvider(k.Provider)
+	if err != nil {
+		return err
 	}
 
 	service := &guber.Service{
@@ -36,7 +41,7 @@ func initSGAPI(c *guber.Client, k *spacetime.Kube, version string) error {
 		},
 	}
 
-	_, err := c.Services("supergiant").Create(service)
+	_, err = c.Services("supergiant").Create(service)
 	if err != nil {
 		return err
 	}
@@ -76,11 +81,16 @@ func initSGAPI(c *guber.Client, k *spacetime.Kube, version string) error {
 								"--etcd-host",
 								"http://etcd:2379",
 								"--k8sHost",
-								"localhost:8080",
+								k.IP,
 								"--k8sUser",
 								k.User,
 								"--k8sPass",
 								k.Pass,
+								"--https-mode",
+								"--access-key",
+								provider.AccessKey,
+								"--secret-key",
+								provider.SecretKey,
 							},
 						},
 					},
