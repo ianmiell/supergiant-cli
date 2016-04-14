@@ -63,6 +63,11 @@ func spacetimeInport() cli.Command {
 				Value: "",
 				Usage: "AWS Avilability Zone of the kubernetes cluster you would like to import.",
 			},
+			cli.StringFlag{
+				Name:  "provider",
+				Value: "",
+				Usage: "Provider to use with this import.",
+			},
 		},
 	}
 

@@ -1,5 +1,8 @@
 # Supergiant Spacetime Control
 ## `supergiant <verb> spacetime`
+*Prerequisite: You must have created a Spacetime Provider with `supergiant create spacetime provider`*
+
+*Configuration Directory: ~/.supergiant*
 
 Spacetime actions control Kubernetes clusters on which your supergiant core will run. The spacetime controller on it's own is a useful way to manage multiple Kubernetes clusters across multiple environments.
 
