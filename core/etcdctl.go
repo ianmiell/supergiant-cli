@@ -11,7 +11,7 @@ import (
 	"github.com/supergiant/supergiant-cli/spacetime"
 )
 
-func initETCD(c *guber.Client, p *spacetime.ProviderConfig, k *spacetime.Kube) error {
+func initETCD(c guber.Client, p *spacetime.ProviderConfig, k *spacetime.Kube) error {
 
 	// make an EBS folume for our data dir.
 	token := ""

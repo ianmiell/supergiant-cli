@@ -4,7 +4,7 @@ import "github.com/supergiant/guber"
 
 //This may be stupid, but for now it will aid with dubugs.
 
-func initETCDBrowser(c *guber.Client) error {
+func initETCDBrowser(c guber.Client) error {
 	service := &guber.Service{
 		Metadata: &guber.Metadata{
 			Name: "sg-etcd-browser",

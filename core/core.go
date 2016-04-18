@@ -9,7 +9,7 @@ import (
 	"github.com/supergiant/supergiant-cli/spacetime"
 )
 
-func initNamespace(c *guber.Client) error {
+func initNamespace(c guber.Client) error {
 	namespace := &guber.Namespace{
 		Metadata: &guber.Metadata{
 			Name: "supergiant",

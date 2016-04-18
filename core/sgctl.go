@@ -5,10 +5,10 @@ import (
 	"github.com/supergiant/supergiant-cli/spacetime"
 )
 
-func initSGAPI(c *guber.Client, k *spacetime.Kube, version string) error {
+func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 	// The default core version.
 	if version == "" {
-		version = "v0.4.3"
+		version = "v0.4.4"
 	}
 
 	provider, err := spacetime.GetProvider(k.Provider)
@@ -80,16 +80,16 @@ func initSGAPI(c *guber.Client, k *spacetime.Kube, version string) error {
 								"/supergiant-api",
 								"--etcd-host",
 								"http://etcd:2379",
-								"--k8sHost",
+								"--k8s-host",
 								k.IP,
-								"--k8sUser",
+								"--k8s-user",
 								k.User,
-								"--k8sPass",
+								"--k8s-pass",
 								k.Pass,
-								"--https-mode",
-								"--access-key",
+								"--k8s-insecure-https",
+								"--aws-access-key",
 								provider.AccessKey,
-								"--secret-key",
+								"--aws-secret-key",
 								provider.SecretKey,
 							},
 						},
