@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/supergiant/guber"
 	"github.com/supergiant/supergiant-cli/spacetime"
 )
@@ -41,8 +42,7 @@ func InstallSGCore(name string) error {
 	if err != nil {
 		return err
 	}
-
-	// Start ETCD in the namspace.
+	//Start ETCD in the namspace.
 	provider, err := kube.GetProvider()
 	if err != nil {
 		return err
@@ -50,22 +50,31 @@ func InstallSGCore(name string) error {
 	err = initETCD(client, provider, kube)
 	if err != nil {
 		return err
-	}
-
+	} //
 	err = initETCDBrowser(client)
 	if err != nil {
 		return err
-	}
-
+	} //
 	//Start the supergiant api.
 	err = initSGAPI(client, kube, "")
 	if err != nil {
 		return err
-	}
+	} //
+	fmt.Println("Waiting for core to settle...")
+	s := spinner.New(spinner.CharSets[1], 100*time.Millisecond) // Build our new spinner
+	s.Start()                                                   // Start the spinner
 
+	time.Sleep(120 * time.Second)
+	s.Stop()
+	//Start the dashboard.
+	dash, err := initDash(client)
+	if err != nil {
+		return err
+	}
 	// Success
 	kube.CoreInstalled = true
 	kube.SgURL = "https://" + kube.User + ":" + kube.Pass + "@" + kube.IP + "/api/v1/proxy/namespaces/supergiant/services/supergiant-api:frontend/"
+	kube.DashURL = "http://" + dash + ":9001"
 	kube.Update()
 
 	return nil
@@ -85,7 +94,10 @@ func DestroySGCore(name string) error {
 
 	// Get a list of namespaces.
 	namespaces := client.Namespaces()
-
+	err = destroyDash()
+	if err != nil {
+		return err
+	}
 	// Delete the supergiant namespace (and all resources).
 	namespaces.Delete("supergiant")
 
@@ -115,8 +127,8 @@ func UpdateSGCore(kubeName string, version string) error {
 	// Delete the RC and wait.
 	var svCount int
 	for {
-		found, _ := client.Services("supergiant").Delete("supergiant-api")
-		if !found {
+		err := client.Services("supergiant").Delete("supergiant-api")
+		if err != nil {
 			break
 		}
 
@@ -132,8 +144,8 @@ func UpdateSGCore(kubeName string, version string) error {
 	// Delete the RC and wait.
 	var rcCount int
 	for {
-		found, _ := client.ReplicationControllers("supergiant").Delete("supergiant-api")
-		if !found {
+		err := client.ReplicationControllers("supergiant").Delete("supergiant-api")
+		if err != nil {
 			break
 		}
 
@@ -158,8 +170,8 @@ func UpdateSGCore(kubeName string, version string) error {
 			// Delete each pod and wait.
 			var podCounter int
 			for {
-				found, _ := client.Pods("supergiant").Delete(pod.Metadata.Name)
-				if !found {
+				err := client.Pods("supergiant").Delete(pod.Metadata.Name)
+				if err != nil {
 					break
 				}
 				fmt.Println("Waiting for pods to delete...")

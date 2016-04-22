@@ -8,7 +8,7 @@ import (
 func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 	// The default core version.
 	if version == "" {
-		version = "v0.4.4"
+		version = "v0.5.0"
 	}
 
 	provider, err := spacetime.GetProvider(k.Provider)
@@ -78,7 +78,7 @@ func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 							Image: "supergiant/supergiant-api:" + version + "",
 							Command: []string{
 								"/supergiant-api",
-								"--etcd-host",
+								"--etcd-hosts",
 								"http://etcd:2379",
 								"--k8s-host",
 								k.IP,

@@ -16,6 +16,7 @@ type Kube struct {
 	Status        string `json:"status"`
 	CoreInstalled bool   `json:"coreInstalled"`
 	SgURL         string `json:"sgurl"`
+	DashURL       string `json:"dashurl"`
 	Region        string `json:"region"`
 	AZ            string `json:"az"`
 	Provider      string `json:"provider"`

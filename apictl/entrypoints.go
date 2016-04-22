@@ -46,6 +46,24 @@ func DestroyEntryPoint(name string) error {
 	return nil
 }
 
+func GetEntryURL(s string) (string, error) {
+	sg, err := getClient()
+	if err != nil {
+		return "", err
+	}
+
+	list, err := sg.Entrypoints().List()
+	if err != nil {
+		return "", err
+	}
+	for _, entry := range list.Items {
+		if *entry.Domain == s {
+			return entry.Address, nil
+		}
+	}
+	return "", nil
+}
+
 // ListEntryPoints sends a list of entrypoints to stdout.
 func ListEntryPoints(name string) error {
 	sg, err := getClient()

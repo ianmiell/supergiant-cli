@@ -48,6 +48,8 @@ Name: ` + k.Name + `
   AZ: ` + k.AZ + `
   Provider: ` + k.Provider + `
   Log: ` + k.Log + `
-	Super Giant URL: ` + k.SgURL + `
+	Super Giant API URL: ` + k.SgURL + `
+	-- Your Dashboard is running at. --
+	Super Giant Dashboard URL: ` + k.DashURL + `
 		`)
 }
