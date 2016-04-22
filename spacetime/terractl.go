@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/google/go-github/github"
 	"github.com/mitchellh/go-homedir"
 )
@@ -276,15 +277,18 @@ func (kube *Kube) init(verbose bool) error {
 	kube.Update()
 
 	// tesing that we are able to reach the cluster with guber.
-	fmt.Println("Checking that Kubernetes is up and running properly...")
+	fmt.Println("Checking that Kubernetes is up and running properly... This will take a few minutes.")
+
+	s := spinner.New(spinner.CharSets[1], 100*time.Millisecond) // Build our new spinner
+	s.Start()                                                   // Start the spinner
+
 	for i := 0; i < 200; i++ {
-		if verbose {
-			fmt.Println("Check for life poll...", i)
-		}
+
 		err = checkForLife(kube.IP, kube.User, kube.Pass)
 		if err != nil {
 			time.Sleep(5 * time.Second)
 		} else {
+			s.Stop()
 			fmt.Println("Kubernetes verified...")
 			break
 		}

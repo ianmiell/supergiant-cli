@@ -7,6 +7,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/supergiant/guber"
+	"github.com/supergiant/supergiant-cli/apictl"
 	"github.com/supergiant/supergiant-cli/spacetime"
 )
 
@@ -40,7 +41,7 @@ func InstallSGCore(name string) error {
 	//Create the "supergiant" namespace.
 	err = initNamespace(client)
 	if err != nil {
-		return err
+		fmt.Println("WARN: Namespace exists.")
 	}
 	//Start ETCD in the namspace.
 	provider, err := kube.GetProvider()
@@ -49,23 +50,35 @@ func InstallSGCore(name string) error {
 	}
 	err = initETCD(client, provider, kube)
 	if err != nil {
-		return err
+		fmt.Println("WARN: ETCD exists.")
 	} //
 	err = initETCDBrowser(client)
 	if err != nil {
-		return err
+		fmt.Println("WARN: ETCD BROWSER exists.")
 	} //
 	//Start the supergiant api.
 	err = initSGAPI(client, kube, "")
 	if err != nil {
-		return err
+		fmt.Println("WARN: ETCD BROWSER exists.", err)
 	} //
-	fmt.Println("Waiting for core to settle...")
-	s := spinner.New(spinner.CharSets[1], 100*time.Millisecond) // Build our new spinner
-	s.Start()                                                   // Start the spinner
+	fmt.Println("Waiting for core to settle... This can take a few minutes.")
+	s := spinner.New(spinner.CharSets[1], 100*time.Millisecond)
+	s.Start()
+	for i := 0; i < 200; i++ {
 
-	time.Sleep(120 * time.Second)
-	s.Stop()
+		_, err = apictl.GetApp("")
+		if err != nil {
+			time.Sleep(2 * time.Second)
+		} else {
+			s.Stop()
+			fmt.Println("Supergiant API verified...")
+			break
+		}
+	}
+	if err != nil {
+		return errors.New("Supergiant API Install Failed.")
+	}
+
 	//Start the dashboard.
 	dash, err := initDash(client)
 	if err != nil {
