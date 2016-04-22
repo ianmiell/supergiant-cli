@@ -46,7 +46,7 @@ func initDash(c guber.Client) (string, error) {
 		9001,
 		true,
 		"supergiant",
-		9001,
+		0,
 	)
 	if err != nil {
 		return "", err
