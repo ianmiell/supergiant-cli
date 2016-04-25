@@ -3,6 +3,8 @@ package sgcore
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -84,11 +86,59 @@ func InstallSGCore(name string) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("Waiting port detect...")
+	s = spinner.New(spinner.CharSets[1], 100*time.Millisecond)
+	s.Start()
+	var service *guber.Service
+	for i := 0; i < 200; i++ {
+
+		service, err = client.Services("supergiant").Get("sg-ui-public")
+		if err != nil {
+			time.Sleep(2 * time.Second)
+		} else {
+			s.Stop()
+			fmt.Println("Port detected...")
+			break
+		}
+	}
+	if err != nil {
+		return errors.New("Supergiant UI Port detection failed.")
+	}
+
+	var uiPort int
+	for _, port := range service.Spec.Ports {
+		if port.Name == "9001" {
+			uiPort = port.NodePort
+		}
+	}
+
 	// Success
 	kube.CoreInstalled = true
 	kube.SgURL = "https://" + kube.User + ":" + kube.Pass + "@" + kube.IP + "/api/v1/proxy/namespaces/supergiant/services/supergiant-api:frontend/"
-	kube.DashURL = "http://" + dash + ":9001"
+	kube.DashURL = "http://" + dash + ":" + strconv.Itoa(uiPort) + ""
 	kube.Update()
+
+	fmt.Println("Waiting Dashboard to be active...")
+	s = spinner.New(spinner.CharSets[1], 100*time.Millisecond)
+	s.Start()
+	for i := 0; i < 200; i++ {
+		err := err
+		resp, err := http.Get(kube.DashURL)
+		if err != nil {
+			time.Sleep(2 * time.Second)
+		} else {
+			if resp.StatusCode == 200 {
+				s.Stop()
+				fmt.Println("Dashboard Detected...")
+				fmt.Println("Dashboard URL:", kube.DashURL)
+				break
+			}
+		}
+	}
+	if err != nil {
+		return errors.New("Dashboard detection failed.")
+	}
 
 	return nil
 }
