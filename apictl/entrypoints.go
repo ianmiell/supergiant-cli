@@ -46,6 +46,7 @@ func DestroyEntryPoint(name string) error {
 	return nil
 }
 
+// GetEntryURL returns the URL of an entrypoint
 func GetEntryURL(s string) (string, error) {
 	sg, err := getClient()
 	if err != nil {

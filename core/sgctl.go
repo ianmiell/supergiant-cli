@@ -8,7 +8,7 @@ import (
 func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 	// The default core version.
 	if version == "" {
-		version = "v0.5.0"
+		version = "v0.5.5"
 	}
 
 	provider, err := spacetime.GetProvider(k.Provider)
@@ -91,6 +91,7 @@ func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 								provider.AccessKey,
 								"--aws-secret-key",
 								provider.SecretKey,
+								"--enable-capacity-service",
 							},
 						},
 					},

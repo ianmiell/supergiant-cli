@@ -227,10 +227,10 @@ Termination Grace Period: ` + strconv.Itoa(release.TerminationGracePeriod) + `
 	for _, container := range release.Containers {
 		fmt.Println("  **************")
 		// Build vars
-		cpuMax := strconv.Itoa(int(container.CPU.Max))
-		cpuMin := strconv.Itoa(int(container.CPU.Min))
-		ramMax := strconv.Itoa(int(container.RAM.Max))
-		ramMin := strconv.Itoa(int(container.RAM.Min))
+		cpuMax := strconv.Itoa(int(container.CPU.Max.Cores()))
+		cpuMin := strconv.Itoa(int(container.CPU.Min.Cores()))
+		ramMax := strconv.Itoa(int(container.RAM.Max.Mebibytes()))
+		ramMin := strconv.Itoa(int(container.RAM.Min.Mebibytes()))
 
 		fmt.Println(`  Container: ` + container.Name + `
     Image: ` + container.Image + `

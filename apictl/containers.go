@@ -8,18 +8,18 @@ import (
 )
 
 // CreateContainer creates a new Container for a resource.
-func CreateContainer(r *client.ReleaseResource, containerName string, image string, cmax uint, cmin uint, mmax uint, mmin uint) error {
+func CreateContainer(r *client.ReleaseResource, containerName string, image string, cmax string, cmin string, mmax string, mmin string) error {
 
 	Container := &common.ContainerBlueprint{
 		Name:  containerName,
 		Image: image,
-		CPU: &common.ResourceAllocation{
-			Max: cmax,
-			Min: cmin,
+		CPU: &common.CpuAllocation{
+			Max: common.CoresFromString(cmax),
+			Min: common.CoresFromString(cmin),
 		},
-		RAM: &common.ResourceAllocation{
-			Max: mmax,
-			Min: mmin,
+		RAM: &common.RamAllocation{
+			Max: common.BytesFromString(mmax),
+			Min: common.BytesFromString(mmin),
 		},
 	}
 
@@ -38,7 +38,7 @@ func CreateContainer(r *client.ReleaseResource, containerName string, image stri
 }
 
 // UpdateContainer updates a Container for a resource.
-func UpdateContainer(r *client.ReleaseResource, containerName string, image string, cmax uint, cmin uint, mmax uint, mmin uint) error {
+func UpdateContainer(r *client.ReleaseResource, containerName string, image string, cmax string, cmin string, mmax string, mmin string) error {
 	/// Find our Container.
 	if len(r.Containers) == 0 {
 		return errors.New("This Component has not Containers.")
@@ -49,17 +49,17 @@ func UpdateContainer(r *client.ReleaseResource, containerName string, image stri
 			if image != "" {
 				r.Containers[i].Image = image
 			}
-			if cmax != 0 {
-				r.Containers[i].CPU.Max = cmax
+			if cmax != "" {
+				r.Containers[i].CPU.Max = common.CoresFromString(cmax)
 			}
-			if cmin != 0 {
-				r.Containers[i].CPU.Min = cmin
+			if cmin != "" {
+				r.Containers[i].CPU.Min = common.CoresFromString(cmin)
 			}
-			if mmax != 0 {
-				r.Containers[i].RAM.Max = mmax
+			if mmax != "" {
+				r.Containers[i].RAM.Max = common.BytesFromString(mmax)
 			}
-			if mmin != 0 {
-				r.Containers[i].RAM.Min = mmin
+			if mmin != "" {
+				r.Containers[i].RAM.Min = common.BytesFromString(mmin)
 			}
 		} else {
 			return errors.New("Container not found.")

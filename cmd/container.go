@@ -30,10 +30,10 @@ func containerCreate() cli.Command {
 				release,
 				required(c, "name", "Container Name"),
 				required(c, "image", "Docker image"),
-				uint(c.Int("cpu-max")),
-				uint(c.Int("cpu-min")),
-				uint(c.Int("ram-max")),
-				uint(c.Int("ram-min")),
+				c.String("cpu-max"),
+				c.String("cpu-min"),
+				c.String("ram-max"),
+				c.String("ram-min"),
 			)
 			if err != nil {
 				fmt.Println("ERROR:", err)
@@ -62,19 +62,19 @@ func containerCreate() cli.Command {
 				Value: "",
 				Usage: "Docker image to use with this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "cpu-max",
 				Usage: "CPU Max allocation for this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "cpu-min",
 				Usage: "CPU Min allocation for this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "ram-max",
 				Usage: "RAM Max allocation for this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "ram-min",
 				Usage: "RAM Min allocation for this container.",
 			},
@@ -105,10 +105,10 @@ func containerUpdate() cli.Command {
 				release,
 				required(c, "name", "Container Name"),
 				required(c, "image", "Docker image"),
-				uint(c.Int("cpu-max")),
-				uint(c.Int("cpu-min")),
-				uint(c.Int("ram-max")),
-				uint(c.Int("ram-min")),
+				c.String("cpu-max"),
+				c.String("cpu-min"),
+				c.String("ram-max"),
+				c.String("ram-min"),
 			)
 			if err != nil {
 				fmt.Println("ERROR:", err)
@@ -136,19 +136,19 @@ func containerUpdate() cli.Command {
 				Value: "",
 				Usage: "Docker image to use with this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "cpu-max",
 				Usage: "CPU Max allocation for this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "cpu-min",
 				Usage: "CPU Min allocation for this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "ram-max",
 				Usage: "RAM Max allocation for this container.",
 			},
-			cli.IntFlag{
+			cli.StringFlag{
 				Name:  "ram-min",
 				Usage: "RAM Min allocation for this container.",
 			},

@@ -18,13 +18,13 @@ var (
 			&common.ContainerBlueprint{
 				Name:  "Hello World",
 				Image: "hello-world",
-				CPU: &common.ResourceAllocation{
-					Max: 0,
-					Min: 0,
+				CPU: &common.CpuAllocation{
+					Max: common.CoresFromString("0"),
+					Min: common.CoresFromString("0"),
 				},
-				RAM: &common.ResourceAllocation{
-					Max: 0,
-					Min: 0,
+				RAM: &common.RamAllocation{
+					Max: common.BytesFromString("0"),
+					Min: common.BytesFromString("0"),
 				},
 				Mounts:  []*common.Mount{},
 				Ports:   []*common.Port{},

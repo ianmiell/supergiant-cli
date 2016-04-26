@@ -30,10 +30,10 @@ func initDash(c guber.Client) (string, error) {
 		release,
 		"dashboard",
 		"supergiant/supergiant-dashboard",
-		uint(0),
-		uint(0),
-		uint(0),
-		uint(0),
+		"0",
+		"0",
+		"0",
+		"0",
 	)
 	if err != nil {
 		return "", err

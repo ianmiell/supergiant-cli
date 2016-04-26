@@ -164,13 +164,13 @@
 		},
 		{
 			"ImportPath": "github.com/supergiant/supergiant/client",
-			"Comment": "v0.5.0",
-			"Rev": "b8f930ce7e9b048aea15e10651d27a3209ac2c08"
+			"Comment": "v0.5.5",
+			"Rev": "a4cffa02b218fad6f2b77472337119607b5d522a"
 		},
 		{
 			"ImportPath": "github.com/supergiant/supergiant/common",
-			"Comment": "v0.5.0",
-			"Rev": "b8f930ce7e9b048aea15e10651d27a3209ac2c08"
+			"Comment": "v0.5.5",
+			"Rev": "a4cffa02b218fad6f2b77472337119607b5d522a"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
