@@ -2,7 +2,6 @@ package apictl
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/supergiant/supergiant/client"
 	"github.com/supergiant/supergiant/common"
@@ -45,11 +44,11 @@ func GetRelease(appName string, compName string) (*client.ReleaseResource, error
 	}
 
 	release, err := comp.TargetRelease()
-	if strings.Contains(err.Error(), "no TargetReleaseTimestamp") {
-		release, err = comp.CurrentRelease()
-	}
 	if err != nil {
-		return nil, errors.New("This Component has no releases.")
+		release, err = comp.CurrentRelease()
+		if err != nil {
+			return nil, errors.New("This Component has no releases.")
+		}
 	}
 	return release, nil
 }

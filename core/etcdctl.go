@@ -25,7 +25,7 @@ func initETCD(c guber.Client, p *spacetime.ProviderConfig, k *spacetime.Kube) er
 
 	awsConf := aws.NewConfig().WithRegion(k.Region).WithCredentials(creds)
 
-	EC2 := ec2.New(session.New(), awsConf.WithLogLevel(aws.LogDebug))
+	EC2 := ec2.New(session.New(), awsConf)
 
 	vtype := "gp2"
 	vsize := int64(20)
