@@ -113,7 +113,7 @@ func ListComponents(appName string) error {
 
 	for _, comp := range list.Items {
 
-		release, err := comp.TargetRelease()
+		release, err := GetRelease(*app.Name, *comp.Name)
 		if err != nil {
 			return err
 		}
@@ -155,7 +155,7 @@ func ListAllComponents() error {
 		}
 
 		for _, comp := range list.Items {
-			release, err := comp.TargetRelease()
+			release, err := GetRelease(*app.Name, *comp.Name)
 			if err != nil {
 				return err
 			}
@@ -204,6 +204,21 @@ Termination Grace Period: ` + strconv.Itoa(release.TerminationGracePeriod) + `
 		fmt.Fprintln(w, "  "+Key+"\t"+value+"\t")
 	}
 	w.Flush()
+
+	fmt.Println("External Addresses:")
+	comp, err := GetComponent(compName, appName)
+	if err != nil {
+		return err
+	}
+	for _, addr := range comp.Addresses.External {
+		fmt.Println(`   -` + addr.Address + ` -(container port)--> ` + addr.Port + ``)
+	}
+
+	fmt.Println("Internal Addresses:")
+	for _, addr := range comp.Addresses.Internal {
+		fmt.Println(`   -` + addr.Address + ` -(container port)--> ` + addr.Port + ``)
+	}
+
 	fmt.Println(`
   Volumes:
  --------------`)
