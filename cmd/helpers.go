@@ -63,3 +63,13 @@ func getComp(c *cli.Context) string {
 	}
 	return comp
 }
+func getFile(c *cli.Context) string {
+	var fileName string
+	args := c.Args().Tail()
+	for i, arg := range args {
+		if arg == "--file" {
+			fileName = args[i+1]
+		}
+	}
+	return fileName
+}

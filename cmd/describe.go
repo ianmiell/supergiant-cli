@@ -42,16 +42,11 @@ func Describe() cli.Command {
 						Value: "",
 						Usage: "Application context.",
 					},
-					cli.StringFlag{
-						Name:  "comp",
-						Value: "",
-						Usage: "Component context.",
-					},
 				},
 				Action: func(c *cli.Context) {
 					err := apictl.ComponentDetails(
 						getApp(c),
-						getComp(c),
+						c.Args().First(),
 					)
 					if err != nil {
 						fmt.Println("ERROR:", err)

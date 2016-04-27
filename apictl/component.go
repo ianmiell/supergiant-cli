@@ -1,11 +1,14 @@
 package apictl
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
 	"text/tabwriter"
 
+	"github.com/ghodss/yaml"
 	"github.com/supergiant/supergiant/client"
 )
 
@@ -46,7 +49,7 @@ func GetComponent(compName string, appName string) (*client.ComponentResource, e
 }
 
 // CreateComponent creates a new component
-func CreateComponent(compName string, appName string) error {
+func CreateComponent(compName string, appName string, file string) error {
 	// Get app
 	fmt.Println("APP:", appName)
 	app, err := GetApp(appName)
@@ -63,8 +66,15 @@ func CreateComponent(compName string, appName string) error {
 		return err
 		//return commonErrorParse(err, "Component Create, "+*comp.Name+"")
 	}
-	// mock release
+
 	release := releaseBoiler
+	if file != "" {
+		fmt.Println("File imort from:", file)
+		release, err = getReleaseFromFile(file)
+		if err != nil {
+			return err
+		}
+	}
 	// Edit logic here.
 
 	// Create Release.
@@ -210,13 +220,22 @@ Termination Grace Period: ` + strconv.Itoa(release.TerminationGracePeriod) + `
 	if err != nil {
 		return err
 	}
-	for _, addr := range comp.Addresses.External {
-		fmt.Println(`   -` + addr.Address + ` -(container port)--> ` + addr.Port + ``)
+
+	if comp.Addresses != nil {
+		for _, addr := range comp.Addresses.External {
+			fmt.Println(`   -` + addr.Address + ` -(container port)--> ` + addr.Port + ``)
+		}
+	} else {
+		fmt.Println(`   - None`)
 	}
 
 	fmt.Println("Internal Addresses:")
-	for _, addr := range comp.Addresses.Internal {
-		fmt.Println(`   -` + addr.Address + ` -(container port)--> ` + addr.Port + ``)
+	if comp.Addresses != nil {
+		for _, addr := range comp.Addresses.Internal {
+			fmt.Println(`   -` + addr.Address + ` -(container port)--> ` + addr.Port + ``)
+		}
+	} else {
+		fmt.Println(`   - None`)
 	}
 
 	fmt.Println(`
@@ -312,6 +331,34 @@ Termination Grace Period: ` + strconv.Itoa(release.TerminationGracePeriod) + `
 			fmt.Println(`      --- ` + command + ``)
 		}
 		fmt.Println("  **************")
+	}
+	return nil
+}
+
+//ListCompenentinFormat outputs a formated return for a component.
+func ListCompenentinFormat(format string, app string, comp string) error {
+
+	release, err := GetRelease(app, comp)
+	if err != nil {
+		return err
+	}
+
+	data, err := json.MarshalIndent(release, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	switch format {
+	case "yaml", "yml":
+		yaml, err := yaml.JSONToYAML(data)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(yaml))
+	case "json", "jsn":
+		fmt.Println(string(data))
+	default:
+		return errors.New("Format: " + format + ", not supperted.")
 	}
 	return nil
 }

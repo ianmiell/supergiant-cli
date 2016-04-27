@@ -52,19 +52,13 @@ func Create() cli.Command {
 					err := apictl.CreateComponent(
 						c.Args().First(), // Component Name
 						getApp(c),        // App name
+						getFile(c),       // file if specified.
 					)
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
 					}
 					fmt.Println("Success...")
-				},
-				Flags: []cli.Flag{
-					cli.StringFlag{
-						Name:  "app",
-						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
-					},
 				},
 			},
 			// Create Entrypoint

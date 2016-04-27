@@ -42,10 +42,48 @@ func Get() cli.Command {
 					cli.StringFlag{
 						Name:  "app",
 						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
+						Usage: "Application Name.",
+					},
+					cli.StringFlag{
+						Name:  "output, o",
+						Value: "",
+						Usage: "Output component in json/yaml format.",
+					},
+					cli.BoolFlag{
+						Name:  "example",
+						Usage: "Output example YAML/JSON file configs.",
 					},
 				},
 				Action: func(c *cli.Context) {
+					// Print Example info
+					if c.Bool("example") {
+						err := apictl.GetReleaseExample()
+						if err != nil {
+							fmt.Println("ERROR:", err)
+							os.Exit(5)
+						}
+						os.Exit(0)
+					}
+
+					// Output in custom format.
+					if c.String("output") != "" {
+						if c.Args().First() == "" {
+							fmt.Println("Specify a component name. \"supergiant get comp <foo> -o json\"")
+							os.Exit(5)
+						}
+						err := apictl.ListCompenentinFormat(
+							c.String("output"),
+							required(c, "app", "Applcation Name"),
+							c.Args().First(),
+						)
+						if err != nil {
+							fmt.Println("ERROR:", err)
+							os.Exit(5)
+						}
+						os.Exit(0)
+					}
+
+					// Show all components.
 					if c.String("app") == "" {
 						err := apictl.ListAllComponents()
 						if err != nil {
@@ -55,6 +93,7 @@ func Get() cli.Command {
 						os.Exit(0)
 					}
 
+					// Show only components for a specified app.
 					err := apictl.ListComponents(c.String("app"))
 					if err != nil {
 						fmt.Println("ERROR:", err)

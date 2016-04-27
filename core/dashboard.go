@@ -16,7 +16,7 @@ func initDash(c guber.Client) (string, error) {
 		fmt.Println("WARN ENTRY POINT:", err)
 	}
 
-	err = apictl.CreateComponent("sg-ui", "supergiant")
+	err = apictl.CreateComponent("sg-ui", "supergiant", "")
 	if err != nil {
 		fmt.Println("WARN COMP:", err)
 	}
