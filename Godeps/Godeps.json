@@ -118,6 +118,10 @@
 			"Rev": "f4193f332207b8229aab642269c297cab1df1015"
 		},
 		{
+			"ImportPath": "github.com/cloudfoundry-incubator/candiedyaml",
+			"Rev": "5cef21e2e4f0fd147973b558d4db7395176bcd95"
+		},
+		{
 			"ImportPath": "github.com/codegangsta/cli",
 			"Comment": "1.2.0-237-g71f57d3",
 			"Rev": "71f57d300dd6a780ac1856c005c4b518cfd498ec"
@@ -126,6 +130,10 @@
 			"ImportPath": "github.com/fatih/color",
 			"Comment": "v0.1-17-g533cd7f",
 			"Rev": "533cd7fd8a85905f67a1753afb4deddc85ea174f"
+		},
+		{
+			"ImportPath": "github.com/ghodss/yaml",
+			"Rev": "1a6f069841556a7bcaff4a397ca6e8328d266c2f"
 		},
 		{
 			"ImportPath": "github.com/go-ini/ini",
