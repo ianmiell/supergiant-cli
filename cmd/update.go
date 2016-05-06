@@ -101,7 +101,26 @@ func Update() cli.Command {
 					fmt.Println("Success...")
 				},
 			},
-
+			// update cli
+			{
+				Name:  "cli",
+				Usage: "Updates the CLI to the latest version or a specified version.",
+				Action: func(c *cli.Context) {
+					err := updateCLI(c.String("version"))
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+					fmt.Println("Success...")
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "version",
+						Value: "",
+						Usage: "Specific CLI version.",
+					},
+				},
+			},
 			// End spacetime actions.
 		},
 	}

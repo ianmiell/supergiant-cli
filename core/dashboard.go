@@ -12,11 +12,11 @@ import (
 func initDash(c guber.Client, version string) (string, error) {
 
 	if version == "" {
-		version = ":v0.5.11"
+		version = ":latest"
 	} else {
 		version = ":" + version
 	}
-
+	fmt.Println("Installing Dashboard version", version)
 	apictl.CreateApp("supergiant")
 	err := apictl.CreateEntryPoint("supergiant")
 	if err != nil {

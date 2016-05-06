@@ -14,7 +14,7 @@ func main() {
 	app.Usage = "Powerful control over your supergiants."
 	app.Version = Version
 	app.Commands = []cli.Command{
-		cmd.Create(),
+		cmd.Create(APIVersion, DASHVersion),
 		cmd.Get(),
 		cmd.Describe(),
 		cmd.Delete(),

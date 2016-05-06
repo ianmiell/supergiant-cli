@@ -12,7 +12,7 @@ import (
 
 // Create contains subcommands to send information about a resource to
 // stdout.
-func Create() cli.Command {
+func Create(apiVersion string, dashVersion string) cli.Command {
 	command := cli.Command{
 		Name:    "create",
 		Aliases: []string{"c"},
@@ -188,7 +188,7 @@ func Create() cli.Command {
 						}
 					}
 					fmt.Println("Kube context is:", kube)
-					err := sgcore.InstallSGCore(kube)
+					err := sgcore.InstallSGCore(kube, apiVersion, dashVersion)
 					if err != nil {
 						fmt.Println("Core Install failed: ", err)
 						os.Exit(5)

@@ -29,7 +29,7 @@ func initNamespace(c guber.Client) error {
 }
 
 // InstallSGCore installs a spergiant instance to a running kubernetes cluster.
-func InstallSGCore(name string) error {
+func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 
 	// Fetch the referenced kube.
 	kube, err := spacetime.GetKube(name)
@@ -59,7 +59,7 @@ func InstallSGCore(name string) error {
 		fmt.Println("WARN: ETCD BROWSER exists.")
 	} //
 	//Start the supergiant api.
-	err = initSGAPI(client, kube, "")
+	err = initSGAPI(client, kube, apiVersion)
 	if err != nil {
 		fmt.Println("WARN: ETCD BROWSER exists.", err)
 	} //
@@ -82,7 +82,7 @@ func InstallSGCore(name string) error {
 	}
 
 	//Start the dashboard.
-	dash, err := initDash(client, "")
+	dash, err := initDash(client, dashVersion)
 	if err != nil {
 		return err
 	}

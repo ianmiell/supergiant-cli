@@ -1,6 +1,8 @@
 package sgcore
 
 import (
+	"fmt"
+
 	"github.com/supergiant/guber"
 	"github.com/supergiant/supergiant-cli/spacetime"
 )
@@ -8,9 +10,10 @@ import (
 func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 	// The default core version.
 	if version == "" {
-		version = "v0.5.11"
+		version = "latest"
 	}
 
+	fmt.Println("Installing Supergiant API version:", version)
 	provider, err := spacetime.GetProvider(k.Provider)
 	if err != nil {
 		return err
