@@ -50,7 +50,12 @@ func Update() cli.Command {
 						Usage: "Name of the Kubernetes/Supergiant cluster to update.",
 					},
 					cli.StringFlag{
-						Name:  "version",
+						Name:  "api-version",
+						Value: "",
+						Usage: "Version you would like to update to. (A default latest stable release is set.)",
+					},
+					cli.StringFlag{
+						Name:  "dash-version",
 						Value: "",
 						Usage: "Version you would like to update to. (A default latest stable release is set.)",
 					},
@@ -72,13 +77,26 @@ func Update() cli.Command {
 						}
 					}
 
-					err := sgcore.UpdateSGCore(
-						kube,
-						c.String("version"),
-					)
-					if err != nil {
-						fmt.Println("ERROR:", err)
-						os.Exit(5)
+					if c.String("api-version") != "" {
+						err := sgcore.UpdateSGCore(
+							kube,
+							c.String("api-version"),
+						)
+						if err != nil {
+							fmt.Println("ERROR:", err)
+							os.Exit(5)
+						}
+					}
+
+					if c.String("dash-version") != "" {
+						err := sgcore.UpdateDash(
+							kube,
+							c.String("dash-version"),
+						)
+						if err != nil {
+							fmt.Println("ERROR:", err)
+							os.Exit(5)
+						}
 					}
 					fmt.Println("Success...")
 				},

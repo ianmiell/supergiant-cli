@@ -2,6 +2,7 @@ package apictl
 
 import (
 	"errors"
+	"os"
 
 	"github.com/supergiant/supergiant-cli/spacetime"
 	"github.com/supergiant/supergiant/client"
@@ -14,6 +15,11 @@ func getClient() (*client.Client, error) {
 	}
 	c := client.New("https://"+kube.IP+"/api/v1/proxy/namespaces/supergiant/services/supergiant-api:frontend/v0", kube.User, kube.Pass, true)
 	//c := client.New("http://localhost:8080/v0", "", "", false)
-	client.Log.Debug("debug")
+
+	debug := os.Getenv("SG_CLI_DEBUG")
+
+	if debug == "true" {
+		client.Log.SetLevel("debug")
+	}
 	return c, nil
 }

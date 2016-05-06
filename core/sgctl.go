@@ -8,7 +8,7 @@ import (
 func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 	// The default core version.
 	if version == "" {
-		version = "v0.5.5"
+		version = "v0.5.11"
 	}
 
 	provider, err := spacetime.GetProvider(k.Provider)

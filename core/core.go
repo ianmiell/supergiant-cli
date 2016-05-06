@@ -82,7 +82,7 @@ func InstallSGCore(name string) error {
 	}
 
 	//Start the dashboard.
-	dash, err := initDash(client)
+	dash, err := initDash(client, "")
 	if err != nil {
 		return err
 	}
@@ -254,5 +254,85 @@ func UpdateSGCore(kubeName string, version string) error {
 		return err
 	}
 
+	return nil
+}
+
+func UpdateDash(name string, version string) error {
+
+	// Fetch the referenced kube.
+	kube, err := spacetime.GetKube(name)
+	if err != nil {
+		return err
+	}
+
+	// Create a new kubernetes client.
+	client := guber.NewClient(kube.IP, kube.User, kube.Pass, true)
+	// destroy old dash
+	fmt.Println("Removing old Dashboard...")
+	err = destroyDash()
+	if err != nil {
+		fmt.Println("WARN: Dash does not appear to exist. trying to continue.")
+	}
+	fmt.Println("Waiting for Dashboard to delete...")
+	time.Sleep(5 * time.Second)
+
+	fmt.Println("Updating dashboard to version: " + version + "...")
+	//Start the dashboard.
+	dash, err := initDash(client, version)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Waiting port detect...")
+	s := spinner.New(spinner.CharSets[1], 100*time.Millisecond)
+	s.Start()
+	var service *guber.Service
+	for i := 0; i < 200; i++ {
+
+		service, err = client.Services("supergiant").Get("sg-ui-public")
+		if err != nil {
+			time.Sleep(2 * time.Second)
+		} else {
+			s.Stop()
+			fmt.Println("Port detected...")
+			break
+		}
+	}
+	if err != nil {
+		return errors.New("Supergiant UI Port detection failed.")
+	}
+
+	var uiPort int
+	for _, port := range service.Spec.Ports {
+		if port.Name == "9001" {
+			uiPort = port.NodePort
+		}
+	}
+
+	// Success
+	kube.CoreInstalled = true
+	kube.DashURL = "http://" + dash + ":" + strconv.Itoa(uiPort) + ""
+	kube.Update()
+
+	fmt.Println("Waiting Dashboard to be active...")
+	s = spinner.New(spinner.CharSets[1], 100*time.Millisecond)
+	s.Start()
+	for i := 0; i < 200; i++ {
+		err := err
+		resp, err := http.Get(kube.DashURL)
+		if err != nil {
+			time.Sleep(2 * time.Second)
+		} else {
+			if resp.StatusCode == 200 {
+				s.Stop()
+				fmt.Println("Dashboard Detected...")
+				fmt.Println("Dashboard URL:", kube.DashURL)
+				break
+			}
+		}
+	}
+	if err != nil {
+		return errors.New("Dashboard detection failed.")
+	}
 	return nil
 }

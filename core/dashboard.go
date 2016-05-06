@@ -9,7 +9,14 @@ import (
 
 //This may be stupid, but for now it will aid with dubugs.
 
-func initDash(c guber.Client) (string, error) {
+func initDash(c guber.Client, version string) (string, error) {
+
+	if version == "" {
+		version = ":v0.5.11"
+	} else {
+		version = ":" + version
+	}
+
 	apictl.CreateApp("supergiant")
 	err := apictl.CreateEntryPoint("supergiant")
 	if err != nil {
@@ -29,7 +36,7 @@ func initDash(c guber.Client) (string, error) {
 	err = apictl.CreateContainer(
 		release,
 		"dashboard",
-		"supergiant/supergiant-dashboard",
+		"supergiant/supergiant-dashboard"+version,
 		"0",
 		"0",
 		"0",
