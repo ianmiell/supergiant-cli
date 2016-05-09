@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/skratchdot/open-golang/open"
 	"github.com/supergiant/guber"
 	"github.com/supergiant/supergiant-cli/apictl"
 	"github.com/supergiant/supergiant-cli/spacetime"
@@ -82,7 +83,7 @@ func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 	}
 
 	//Start the dashboard.
-	dash, err := initDash(client, dashVersion)
+	dash, err := initDash(client, dashVersion, kube)
 	if err != nil {
 		return err
 	}
@@ -108,15 +109,17 @@ func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 
 	var uiPort int
 	for _, port := range service.Spec.Ports {
-		if port.Name == "9001" {
+		if port.Name == "80" {
 			uiPort = port.NodePort
 		}
 	}
 
+	fmt.Println("Dashboard Port Set to Port:", uiPort)
+
 	// Success
 	kube.CoreInstalled = true
 	kube.SgURL = "https://" + kube.User + ":" + kube.Pass + "@" + kube.IP + "/api/v1/proxy/namespaces/supergiant/services/supergiant-api:frontend/"
-	kube.DashURL = "http://" + dash + ":" + strconv.Itoa(uiPort) + ""
+	kube.DashURL = "http://" + dash + ""
 	kube.Update()
 
 	fmt.Println("Waiting Dashboard to be active...")
@@ -132,6 +135,7 @@ func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 				s.Stop()
 				fmt.Println("Dashboard Detected...")
 				fmt.Println("Dashboard URL:", kube.DashURL)
+				open.Run(kube.DashURL)
 				break
 			}
 		}
@@ -157,7 +161,7 @@ func DestroySGCore(name string) error {
 
 	// Get a list of namespaces.
 	namespaces := client.Namespaces()
-	err = destroyDash()
+	err = destroyDash(kube)
 	if err != nil {
 		return err
 	}
@@ -269,7 +273,7 @@ func UpdateDash(name string, version string) error {
 	client := guber.NewClient(kube.IP, kube.User, kube.Pass, true)
 	// destroy old dash
 	fmt.Println("Removing old Dashboard...")
-	err = destroyDash()
+	err = destroyDash(kube)
 	if err != nil {
 		fmt.Println("WARN: Dash does not appear to exist. trying to continue.")
 	}
@@ -278,7 +282,7 @@ func UpdateDash(name string, version string) error {
 
 	fmt.Println("Updating dashboard to version: " + version + "...")
 	//Start the dashboard.
-	dash, err := initDash(client, version)
+	dash, err := initDash(client, version, kube)
 	if err != nil {
 		return err
 	}

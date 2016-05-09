@@ -11,6 +11,7 @@ type Kube struct {
 	User          string `json:"user"`
 	Pass          string `json:"pass"`
 	IP            string `json:"ip"`
+	SGID          string `json:"sg_id"`
 	MinionSize    string `json:"minionSize"`
 	KubeVersion   string `json:"kubeVersion"`
 	Status        string `json:"status"`

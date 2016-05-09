@@ -268,7 +268,7 @@ func (kube *Kube) init(verbose bool) error {
 		fmt.Println("Terraform build completed successfully...")
 		// Fetch info from our new cluster
 		fmt.Println("Loading cluster informations from terraform...")
-		kube.IP, err = terraStateParser("" + terraStateDir + "/terraform.tfstate")
+		kube.IP, kube.SGID, err = terraStateParser("" + terraStateDir + "/terraform.tfstate")
 	}
 	if err != nil {
 		kube.fail()

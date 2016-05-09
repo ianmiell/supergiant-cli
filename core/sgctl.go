@@ -89,6 +89,8 @@ func initSGAPI(c guber.Client, k *spacetime.Kube, version string) error {
 								k.User,
 								"--k8s-pass",
 								k.Pass,
+								"--aws-sg-id",
+								k.SGID,
 								"--k8s-insecure-https",
 								"--aws-access-key",
 								provider.AccessKey,

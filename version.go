@@ -1,7 +1,7 @@
 package main
 
 // Version CLI release version.
-const Version string = "0.5.10"
+const Version string = "0.5.11"
 
 // APIVersion Currently certified API Version.
 const APIVersion = "v0.5.11"

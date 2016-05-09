@@ -2,14 +2,16 @@ package sgcore
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/supergiant/guber"
 	"github.com/supergiant/supergiant-cli/apictl"
+	"github.com/supergiant/supergiant-cli/spacetime"
 )
 
 //This may be stupid, but for now it will aid with dubugs.
 
-func initDash(c guber.Client, version string) (string, error) {
+func initDash(c guber.Client, version string, k *spacetime.Kube) (string, error) {
 
 	if version == "" {
 		version = ":latest"
@@ -18,7 +20,7 @@ func initDash(c guber.Client, version string) (string, error) {
 	}
 	fmt.Println("Installing Dashboard version", version)
 	apictl.CreateApp("supergiant")
-	err := apictl.CreateEntryPoint("supergiant")
+	err := apictl.CreateEntryPoint(k.Name)
 	if err != nil {
 		fmt.Println("WARN ENTRY POINT:", err)
 	}
@@ -52,8 +54,8 @@ func initDash(c guber.Client, version string) (string, error) {
 		"TCP",
 		9001,
 		true,
-		"supergiant",
-		0,
+		k.Name,
+		80,
 	)
 	if err != nil {
 		return "", err
@@ -84,20 +86,21 @@ func initDash(c guber.Client, version string) (string, error) {
 		return "", err
 	}
 
-	dash, err := apictl.GetEntryURL("supergiant")
+	dash, err := apictl.GetEntryURL(k.Name)
 	if err != nil {
 		return "", err
 	}
-	return dash, nil
+	s := strings.Split(dash, ":")
+	return s[0], nil
 
 }
 
-func destroyDash() error {
+func destroyDash(k *spacetime.Kube) error {
 	err := apictl.DestroyComponent("sg-ui", "supergiant")
 	if err != nil {
 		return err
 	}
-	err = apictl.DestroyEntryPoint("supergiant")
+	err = apictl.DestroyEntryPoint(k.Name)
 	if err != nil {
 		return nil
 	}
