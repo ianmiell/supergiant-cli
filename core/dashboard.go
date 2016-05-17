@@ -12,6 +12,10 @@ import (
 //This may be stupid, but for now it will aid with dubugs.
 
 func initDash(c guber.Client, version string, k *spacetime.Kube) (string, error) {
+	sg, err := apictl.NewClient("", "", "")
+	if err != nil {
+		return "", err
+	}
 
 	if version == "" {
 		version = ":latest"
@@ -19,18 +23,18 @@ func initDash(c guber.Client, version string, k *spacetime.Kube) (string, error)
 		version = ":" + version
 	}
 	fmt.Println("Installing Dashboard version", version)
-	apictl.CreateApp("supergiant")
-	err := apictl.CreateEntryPoint(k.Name)
+	sg.CreateApp("supergiant")
+	err = sg.CreateEntryPoint(k.Name)
 	if err != nil {
 		fmt.Println("WARN ENTRY POINT:", err)
 	}
 
-	err = apictl.CreateComponent("sg-ui", "supergiant", "")
+	err = sg.CreateComponent("sg-ui", "supergiant", "")
 	if err != nil {
 		fmt.Println("WARN COMP:", err)
 	}
 
-	release, err := apictl.GetRelease("supergiant", "sg-ui")
+	release, err := sg.GetRelease("supergiant", "sg-ui")
 	if err != nil {
 		return "", err
 	}
@@ -81,12 +85,12 @@ func initDash(c guber.Client, version string, k *spacetime.Kube) (string, error)
 		return "", err
 	}
 
-	err = apictl.DeployComponent("sg-ui", "supergiant")
+	err = sg.DeployComponent("sg-ui", "supergiant")
 	if err != nil {
 		return "", err
 	}
 
-	dash, err := apictl.GetEntryURL(k.Name)
+	dash, err := sg.GetEntryURL(k.Name)
 	if err != nil {
 		return "", err
 	}
@@ -96,11 +100,15 @@ func initDash(c guber.Client, version string, k *spacetime.Kube) (string, error)
 }
 
 func destroyDash(k *spacetime.Kube) error {
-	err := apictl.DestroyComponent("sg-ui", "supergiant")
+	sg, err := apictl.NewClient("", "", "")
 	if err != nil {
 		return err
 	}
-	err = apictl.DestroyEntryPoint(k.Name)
+	err = sg.DestroyComponent("sg-ui", "supergiant")
+	if err != nil {
+		return err
+	}
+	err = sg.DestroyEntryPoint(k.Name)
 	if err != nil {
 		return nil
 	}

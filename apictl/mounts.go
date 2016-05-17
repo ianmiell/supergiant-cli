@@ -2,6 +2,7 @@ package apictl
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/supergiant/supergiant/client"
 	"github.com/supergiant/supergiant/common"
@@ -19,10 +20,19 @@ func CreateMount(r *client.ReleaseResource, containerName string, path string, v
 		Volume: &volume,
 	}
 
+	fault := false
 	for _, container := range r.Containers {
 		if container.Name == containerName {
 			container.Mounts = append(container.Mounts, mount)
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()
@@ -36,16 +46,20 @@ func CreateMount(r *client.ReleaseResource, containerName string, path string, v
 // UpdateMount updates a mount for a container resource.
 func UpdateMount(r *client.ReleaseResource, containerName string, path string, volume string) error {
 
+	if !volumeExist(r, volume) {
+		return errors.New("Volume Does Not Exist...")
+	}
+
+	fault := false
 	for ci, container := range r.Containers {
+		fmt.Println(container.Name)
 		if container.Name == containerName {
 			if len(container.Mounts) == 0 {
 				return errors.New("This container has no mounts.")
 			}
 			for mi, mount := range container.Mounts {
+				fmt.Println(mount.Path)
 				if mount.Path == path {
-					if path != "" {
-						r.Containers[ci].Mounts[mi].Path = path
-					}
 					if volume != "" {
 						r.Containers[ci].Mounts[mi].Volume = &volume
 					}
@@ -53,7 +67,15 @@ func UpdateMount(r *client.ReleaseResource, containerName string, path string, v
 					return errors.New("Mount not found.")
 				}
 			}
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()
@@ -67,6 +89,7 @@ func UpdateMount(r *client.ReleaseResource, containerName string, path string, v
 // DeleteMount deletes a mount for a container resource.
 func DeleteMount(r *client.ReleaseResource, containerName string, path string) error {
 
+	fault := false
 	for ci, container := range r.Containers {
 		if container.Name == containerName {
 			if len(container.Mounts) == 0 {
@@ -79,7 +102,15 @@ func DeleteMount(r *client.ReleaseResource, containerName string, path string) e
 					return errors.New("Mount not found.")
 				}
 			}
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()

@@ -15,8 +15,8 @@ import (
 var errorString = "Error"
 
 // DeployComponent Deploys a component live.
-func DeployComponent(compName string, appName string) error {
-	app, err := GetApp(appName)
+func (sg *SGClient) DeployComponent(compName string, appName string) error {
+	app, err := sg.GetApp(appName)
 	if err != nil {
 		return err
 	}
@@ -35,8 +35,8 @@ func DeployComponent(compName string, appName string) error {
 }
 
 // GetComponent gets a component object in context.
-func GetComponent(compName string, appName string) (*client.ComponentResource, error) {
-	app, err := GetApp(appName)
+func (sg *SGClient) GetComponent(compName string, appName string) (*client.ComponentResource, error) {
+	app, err := sg.GetApp(appName)
 	if err != nil {
 		return nil, err
 	}
@@ -49,10 +49,10 @@ func GetComponent(compName string, appName string) (*client.ComponentResource, e
 }
 
 // CreateComponent creates a new component
-func CreateComponent(compName string, appName string, file string) error {
+func (sg *SGClient) CreateComponent(compName string, appName string, file string) error {
 	// Get app
 	fmt.Println("APP:", appName)
-	app, err := GetApp(appName)
+	app, err := sg.GetApp(appName)
 	if err != nil {
 		return commonErrorParse(err, "Application Get, "+appName+"")
 	}
@@ -86,8 +86,8 @@ func CreateComponent(compName string, appName string, file string) error {
 }
 
 // DestroyComponent destroys a component
-func DestroyComponent(compName string, appName string) error {
-	app, err := GetApp(appName)
+func (sg *SGClient) DestroyComponent(compName string, appName string) error {
+	app, err := sg.GetApp(appName)
 	if err != nil {
 		return commonErrorParse(err, "Application Get, "+appName+"")
 	}
@@ -106,8 +106,8 @@ func DestroyComponent(compName string, appName string) error {
 }
 
 // ListComponents sends a list of componants to stdout
-func ListComponents(appName string) error {
-	app, err := GetApp(appName)
+func (sg *SGClient) ListComponents(appName string) error {
+	app, err := sg.GetApp(appName)
 	if err != nil {
 		return commonErrorParse(err, "Application Get, "+appName+"")
 	}
@@ -123,7 +123,7 @@ func ListComponents(appName string) error {
 
 	for _, comp := range list.Items {
 
-		release, err := GetRelease(*app.Name, *comp.Name)
+		release, err := sg.GetRelease(*app.Name, *comp.Name)
 		if err != nil {
 			return err
 		}
@@ -142,12 +142,7 @@ func ListComponents(appName string) error {
 }
 
 // ListAllComponents sends a list of componants to stdout
-func ListAllComponents() error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
-
+func (sg *SGClient) ListAllComponents() error {
 	apps, err := sg.Apps().List()
 	if err != nil {
 		return err
@@ -165,7 +160,7 @@ func ListAllComponents() error {
 		}
 
 		for _, comp := range list.Items {
-			release, err := GetRelease(*app.Name, *comp.Name)
+			release, err := sg.GetRelease(*app.Name, *comp.Name)
 			if err != nil {
 				return err
 			}
@@ -188,9 +183,9 @@ func ListAllComponents() error {
 }
 
 // ComponentDetails returns a detailed description of a component to stdout.
-func ComponentDetails(appName string, compName string) error {
+func (sg *SGClient) ComponentDetails(appName string, compName string) error {
 
-	release, err := GetRelease(appName, compName)
+	release, err := sg.GetRelease(appName, compName)
 	if err != nil {
 		return err
 	}
@@ -216,7 +211,7 @@ Termination Grace Period: ` + strconv.Itoa(release.TerminationGracePeriod) + `
 	w.Flush()
 
 	fmt.Println("External Addresses:")
-	comp, err := GetComponent(compName, appName)
+	comp, err := sg.GetComponent(compName, appName)
 	if err != nil {
 		return err
 	}
@@ -336,9 +331,9 @@ Termination Grace Period: ` + strconv.Itoa(release.TerminationGracePeriod) + `
 }
 
 //ListCompenentinFormat outputs a formated return for a component.
-func ListCompenentinFormat(format string, app string, comp string) error {
+func (sg *SGClient) ListCompenentinFormat(format string, app string, comp string) error {
 
-	release, err := GetRelease(app, comp)
+	release, err := sg.GetRelease(app, comp)
 	if err != nil {
 		return err
 	}

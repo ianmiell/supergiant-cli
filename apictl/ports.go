@@ -18,10 +18,19 @@ func CreatePort(r *client.ReleaseResource, containerName string, proto string, n
 		ExternalNumber:   enum,
 	}
 
+	fault := false
 	for _, container := range r.Containers {
 		if container.Name == containerName {
 			container.Ports = append(container.Ports, port)
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()
@@ -35,6 +44,7 @@ func CreatePort(r *client.ReleaseResource, containerName string, proto string, n
 // UpdatePort updates a port for a container resource.
 func UpdatePort(r *client.ReleaseResource, containerName string, proto string, num int, pub bool, entry string, enum int) error {
 
+	fault := false
 	for ci, container := range r.Containers {
 		if container.Name == containerName {
 			if len(container.Ports) == 0 {
@@ -61,7 +71,15 @@ func UpdatePort(r *client.ReleaseResource, containerName string, proto string, n
 					return errors.New("Port not found.")
 				}
 			}
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()
@@ -75,6 +93,7 @@ func UpdatePort(r *client.ReleaseResource, containerName string, proto string, n
 // DeletePort deletes a port for a container resource.
 func DeletePort(r *client.ReleaseResource, containerName string, num int) error {
 
+	fault := false
 	for ci, container := range r.Containers {
 		if container.Name == containerName {
 			if len(container.Ports) == 0 {
@@ -87,7 +106,15 @@ func DeletePort(r *client.ReleaseResource, containerName string, num int) error 
 					return errors.New("Port not found.")
 				}
 			}
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()

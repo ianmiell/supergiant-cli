@@ -49,17 +49,21 @@ func UpdateContainer(r *client.ReleaseResource, containerName string, image stri
 			if image != "" {
 				r.Containers[i].Image = image
 			}
-			if cmax != "" {
-				r.Containers[i].CPU.Max = common.CoresFromString(cmax)
+			if cmax != "" && cmin != "" {
+				r.Containers[i].CPU = &common.CpuAllocation{
+					Max: common.CoresFromString(cmax),
+					Min: common.CoresFromString(cmin),
+				}
+			} else if cmax != "" || cmin != "" {
+				return errors.New("Both CPU MAX, and MIN must be defined.")
 			}
-			if cmin != "" {
-				r.Containers[i].CPU.Min = common.CoresFromString(cmin)
-			}
-			if mmax != "" {
-				r.Containers[i].RAM.Max = common.BytesFromString(mmax)
-			}
-			if mmin != "" {
-				r.Containers[i].RAM.Min = common.BytesFromString(mmin)
+			if mmax != "" && mmin != "" {
+				r.Containers[i].RAM = &common.RamAllocation{
+					Max: common.BytesFromString(mmax),
+					Min: common.BytesFromString(mmin),
+				}
+			} else if mmax != "" || mmin != "" {
+				return errors.New("Both RAM MAX, and MIN must be defined.")
 			}
 		} else {
 			return errors.New("Container not found.")

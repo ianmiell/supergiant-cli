@@ -87,9 +87,9 @@ func GetReleaseExample() error {
 }
 
 // GetRelease gets the target release, or a boiler plate with context
-func GetRelease(appName string, compName string) (*client.ReleaseResource, error) {
+func (sg *SGClient) GetRelease(appName string, compName string) (*client.ReleaseResource, error) {
 
-	comp, err := GetComponent(compName, appName)
+	comp, err := sg.GetComponent(compName, appName)
 	if err != nil {
 		return nil, compGetError(compName, err)
 	}

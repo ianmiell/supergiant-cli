@@ -26,7 +26,13 @@ func Get() cli.Command {
 				Aliases: []string{"apps", "app", "applications"},
 				Usage:   "Lists Supergaint applications. Aliases: \"apps\", \"app\", \"applications\"",
 				Action: func(c *cli.Context) {
-					err := apictl.ListApps("")
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.ListApps("")
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
@@ -55,6 +61,12 @@ func Get() cli.Command {
 					},
 				},
 				Action: func(c *cli.Context) {
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
 					// Print Example info
 					if c.Bool("example") {
 						err := apictl.GetReleaseExample()
@@ -71,7 +83,7 @@ func Get() cli.Command {
 							fmt.Println("Specify a component name. \"supergiant get comp <foo> -o json\"")
 							os.Exit(5)
 						}
-						err := apictl.ListCompenentinFormat(
+						err = sg.ListCompenentinFormat(
 							c.String("output"),
 							required(c, "app", "Applcation Name"),
 							c.Args().First(),
@@ -85,7 +97,7 @@ func Get() cli.Command {
 
 					// Show all components.
 					if c.String("app") == "" {
-						err := apictl.ListAllComponents()
+						err := sg.ListAllComponents()
 						if err != nil {
 							fmt.Println("ERROR:", err)
 							os.Exit(5)
@@ -94,7 +106,7 @@ func Get() cli.Command {
 					}
 
 					// Show only components for a specified app.
-					err := apictl.ListComponents(c.String("app"))
+					err = sg.ListComponents(c.String("app"))
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
@@ -107,7 +119,13 @@ func Get() cli.Command {
 				Aliases: []string{"entrypoints", "entry", "loadbalancer", "lb"},
 				Usage:   "Lists Supergiant entrypoints. Aliases: \"entrypoints\", \"entry\", \"loadbalancer\", \"lb\"",
 				Action: func(c *cli.Context) {
-					err := apictl.ListEntryPoints(c.Args().First())
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.ListEntryPoints(c.Args().First())
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)

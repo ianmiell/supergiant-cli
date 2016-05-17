@@ -26,7 +26,13 @@ func Delete() cli.Command {
 				Aliases: []string{"apps", "app", "applications"},
 				Usage:   "Destroys Supergaint applications. Aliases: \"apps\", \"app\", \"applications\"",
 				Action: func(c *cli.Context) {
-					err := apictl.DestroyApp(c.Args().First())
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.DestroyApp(c.Args().First())
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
@@ -48,7 +54,13 @@ func Delete() cli.Command {
 					containerDelete(),
 				},
 				Action: func(c *cli.Context) {
-					err := apictl.DestroyComponent(
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.DestroyComponent(
 						c.Args().First(),
 						getApp(c),
 					)
@@ -72,7 +84,13 @@ func Delete() cli.Command {
 				Aliases: []string{"entrypoints", "entry", "loadbalancer", "lb"},
 				Usage:   "Destroys Supergiant entrypoints. Aliases: \"entrypoints\", \"entry\", \"loadbalancer\", \"lb\"",
 				Action: func(c *cli.Context) {
-					err := apictl.DestroyEntryPoint(c.Args().First())
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.DestroyEntryPoint(c.Args().First())
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)

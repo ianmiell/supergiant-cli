@@ -26,7 +26,13 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 				Aliases: []string{"apps", "app", "applications"},
 				Usage:   "Creates Supergaint applications. Aliases: \"apps\", \"app\", \"applications\"",
 				Action: func(c *cli.Context) {
-					err := apictl.CreateApp(c.Args().First())
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.CreateApp(c.Args().First())
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
@@ -49,7 +55,13 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 					componentDeploy(),
 				},
 				Action: func(c *cli.Context) {
-					err := apictl.CreateComponent(
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.CreateComponent(
 						c.Args().First(), // Component Name
 						getApp(c),        // App name
 						getFile(c),       // file if specified.
@@ -67,7 +79,13 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 				Aliases: []string{"entrypoints", "entry", "loadbalancer", "lb"},
 				Usage:   "Creates Supergiant entrypoints. Aliases: \"entrypoints\", \"entry\", \"loadbalancer\", \"lb\"",
 				Action: func(c *cli.Context) {
-					err := apictl.CreateEntryPoint(
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.CreateEntryPoint(
 						c.Args().First(), // Entrypoint name
 					)
 					if err != nil {

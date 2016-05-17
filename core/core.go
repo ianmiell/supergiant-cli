@@ -38,6 +38,11 @@ func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 		return err
 	}
 
+	sg, err := apictl.NewClient("", "", "")
+	if err != nil {
+		return err
+	}
+
 	// Create a new kubernetes client.
 	client := guber.NewClient(kube.IP, kube.User, kube.Pass, true)
 
@@ -69,7 +74,7 @@ func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 	s.Start()
 	for i := 0; i < 200; i++ {
 
-		_, err = apictl.GetApp("")
+		_, err = sg.GetApp("")
 		if err != nil {
 			time.Sleep(2 * time.Second)
 		} else {

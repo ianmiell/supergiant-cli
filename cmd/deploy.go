@@ -14,7 +14,13 @@ func componentDeploy() cli.Command {
 		Aliases: []string{"volumes"},
 		Usage:   "Deploys a component live.",
 		Action: func(c *cli.Context) {
-			err := apictl.DeployComponent(
+			sg, err := apictl.NewClient("", "", "")
+			if err != nil {
+				fmt.Println("ERROR:", err)
+				os.Exit(5)
+			}
+
+			err = sg.DeployComponent(
 				c.Args().First(),
 				required(c, "app", "Application Name"),
 			)

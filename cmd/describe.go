@@ -24,7 +24,13 @@ func Describe() cli.Command {
 				Aliases: []string{"apps", "app", "applications"},
 				Usage:   "Describes Supergaint applications. Aliases: \"apps\", \"app\", \"applications\"",
 				Action: func(c *cli.Context) {
-					err := apictl.ListApps("")
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.ListApps("")
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)
@@ -44,7 +50,13 @@ func Describe() cli.Command {
 					},
 				},
 				Action: func(c *cli.Context) {
-					err := apictl.ComponentDetails(
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.ComponentDetails(
 						getApp(c),
 						c.Args().First(),
 					)
@@ -60,7 +72,13 @@ func Describe() cli.Command {
 				Aliases: []string{"entrypoints", "entry", "loadbalancer", "lb"},
 				Usage:   "Describes Supergiant entrypoints. Aliases: \"entrypoints\", \"entry\", \"loadbalancer\", \"lb\"",
 				Action: func(c *cli.Context) {
-					err := apictl.ListEntryPoints(c.Args().First())
+					sg, err := apictl.NewClient("", "", "")
+					if err != nil {
+						fmt.Println("ERROR:", err)
+						os.Exit(5)
+					}
+
+					err = sg.ListEntryPoints(c.Args().First())
 					if err != nil {
 						fmt.Println("ERROR:", err)
 						os.Exit(5)

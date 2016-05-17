@@ -31,6 +31,7 @@ func CreateEnv(r *client.ReleaseResource, containerName string, name string, val
 // UpdateEnv updates a Env for a container resource.
 func UpdateEnv(r *client.ReleaseResource, containerName string, name string, value string) error {
 
+	fault := false
 	for ci, container := range r.Containers {
 		if container.Name == containerName {
 			if len(container.Env) == 0 {
@@ -43,7 +44,15 @@ func UpdateEnv(r *client.ReleaseResource, containerName string, name string, val
 					return errors.New("Env not found.")
 				}
 			}
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()
@@ -57,6 +66,7 @@ func UpdateEnv(r *client.ReleaseResource, containerName string, name string, val
 // DeleteEnv deletes a Env for a container resource.
 func DeleteEnv(r *client.ReleaseResource, containerName string, name string) error {
 
+	fault := false
 	for ci, container := range r.Containers {
 		if container.Name == containerName {
 			if len(container.Env) == 0 {
@@ -69,7 +79,15 @@ func DeleteEnv(r *client.ReleaseResource, containerName string, name string) err
 					return errors.New("Env not found.")
 				}
 			}
+			fault = false
+			break
 		}
+		fault = true
+	}
+
+	// error if no containers found.
+	if fault {
+		return errors.New("Container Does Not Exist...")
 	}
 
 	_, err := r.Save()

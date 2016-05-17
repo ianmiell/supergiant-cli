@@ -10,12 +10,7 @@ import (
 )
 
 // GetApp gets a app object in context.
-func GetApp(appName string) (*client.AppResource, error) {
-	// Get context
-	sg, err := getClient()
-	if err != nil {
-		return nil, err
-	}
+func (sg *SGClient) GetApp(appName string) (*client.AppResource, error) {
 
 	app, err := sg.Apps().Get(&appName)
 	if err != nil {
@@ -25,17 +20,12 @@ func GetApp(appName string) (*client.AppResource, error) {
 }
 
 // CreateApp makes a new supergiant app.
-func CreateApp(name string) error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
-
+func (sg *SGClient) CreateApp(name string) error {
 	app := &client.App{
 		Name: &name,
 	}
 
-	_, err = sg.Apps().Create(app)
+	_, err := sg.Apps().Create(app)
 	if err != nil {
 		return err
 	}
@@ -43,11 +33,7 @@ func CreateApp(name string) error {
 }
 
 //DestroyApp deletes a app
-func DestroyApp(name string) error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
+func (sg *SGClient) DestroyApp(name string) error {
 
 	app, err := sg.Apps().Get(&name)
 	if err != nil {
@@ -63,11 +49,7 @@ func DestroyApp(name string) error {
 }
 
 // ListApps sends a list of apps to stdout
-func ListApps(name string) error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
+func (sg *SGClient) ListApps(name string) error {
 
 	list, err := sg.Apps().List()
 	if err != nil {
@@ -81,7 +63,7 @@ func ListApps(name string) error {
 	for _, app := range list.Items {
 		appName := *app.Name
 		createTime := app.Created.String()
-		comps, err := getAppComps(appName)
+		comps, err := sg.getAppComps(appName)
 		compCount := strconv.Itoa(len(comps))
 		if err != nil {
 			compCount = "Error"
@@ -93,12 +75,8 @@ func ListApps(name string) error {
 	return nil
 }
 
-func getAppComps(appName string) ([]*client.Component, error) {
+func (sg *SGClient) getAppComps(appName string) ([]*client.Component, error) {
 	var rcomps []*client.Component
-	sg, err := getClient()
-	if err != nil {
-		return nil, err
-	}
 
 	app, err := sg.Apps().Get(&appName)
 	if err != nil {

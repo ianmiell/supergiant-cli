@@ -14,7 +14,13 @@ func mountCreate() cli.Command {
 		Aliases: []string{"mounts"},
 		Usage:   "Create a new component container mount.",
 		Action: func(c *cli.Context) {
-			release, err := apictl.GetRelease(
+			sg, err := apictl.NewClient("", "", "")
+			if err != nil {
+				fmt.Println("ERROR:", err)
+				os.Exit(5)
+			}
+
+			release, err := sg.GetRelease(
 				required(c, "app", "Application Name"),
 				required(c, "comp", "Component Name"),
 			)
@@ -71,7 +77,13 @@ func mountUpdate() cli.Command {
 		Aliases: []string{"mounts"},
 		Usage:   "Create a new component container mount.",
 		Action: func(c *cli.Context) {
-			release, err := apictl.GetRelease(
+			sg, err := apictl.NewClient("", "", "")
+			if err != nil {
+				fmt.Println("ERROR:", err)
+				os.Exit(5)
+			}
+
+			release, err := sg.GetRelease(
 				required(c, "app", "Application Name"),
 				required(c, "comp", "Component Name"),
 			)
@@ -128,7 +140,13 @@ func mountDelete() cli.Command {
 		Aliases: []string{"mounts"},
 		Usage:   "Create a new component container mount.",
 		Action: func(c *cli.Context) {
-			release, err := apictl.GetRelease(
+			sg, err := apictl.NewClient("", "", "")
+			if err != nil {
+				fmt.Println("ERROR:", err)
+				os.Exit(5)
+			}
+
+			release, err := sg.GetRelease(
 				required(c, "app", "Application Name"),
 				required(c, "comp", "Component Name"),
 			)

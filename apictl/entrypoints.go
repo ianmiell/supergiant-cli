@@ -9,17 +9,12 @@ import (
 )
 
 // CreateEntryPoint makes a new supergiant endpoint.
-func CreateEntryPoint(name string) error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
-
+func (sg *SGClient) CreateEntryPoint(name string) error {
 	entrypoint := &client.Entrypoint{
 		Domain: &name,
 	}
 
-	_, err = sg.Entrypoints().Create(entrypoint)
+	_, err := sg.Entrypoints().Create(entrypoint)
 	if err != nil {
 		return err
 	}
@@ -27,12 +22,7 @@ func CreateEntryPoint(name string) error {
 }
 
 // DestroyEntryPoint deletes an entrypoint
-func DestroyEntryPoint(name string) error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
-
+func (sg *SGClient) DestroyEntryPoint(name string) error {
 	entrypoint, err := sg.Entrypoints().Get(&name)
 	if err != nil {
 		return err
@@ -47,12 +37,7 @@ func DestroyEntryPoint(name string) error {
 }
 
 // GetEntryURL returns the URL of an entrypoint
-func GetEntryURL(s string) (string, error) {
-	sg, err := getClient()
-	if err != nil {
-		return "", err
-	}
-
+func (sg *SGClient) GetEntryURL(s string) (string, error) {
 	list, err := sg.Entrypoints().List()
 	if err != nil {
 		return "", err
@@ -66,12 +51,7 @@ func GetEntryURL(s string) (string, error) {
 }
 
 // ListEntryPoints sends a list of entrypoints to stdout.
-func ListEntryPoints(name string) error {
-	sg, err := getClient()
-	if err != nil {
-		return err
-	}
-
+func (sg *SGClient) ListEntryPoints(name string) error {
 	list, err := sg.Entrypoints().List()
 	if err != nil {
 		return err
@@ -113,12 +93,8 @@ func ListEntryPoints(name string) error {
 }
 
 // slice of comps assigned to a entrypoint
-func getEntrypointComps(entrypointID string) ([]string, error) {
+func (sg *SGClient) getEntrypointComps(entrypointID string) ([]string, error) {
 	var ecomps []string
-	sg, err := getClient()
-	if err != nil {
-		return ecomps, err
-	}
 
 	apps, err := sg.Apps().List()
 	if err != nil {
