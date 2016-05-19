@@ -43,7 +43,6 @@ var (
 func getReleaseFromFile(thefile string) (*client.Release, error) {
 	// Make sure release file exists.
 	_, err := os.Stat(thefile)
-	// else create it.
 	if os.IsNotExist(err) {
 		return nil, errors.New("Unable to locate file...")
 	}
@@ -94,8 +93,13 @@ func (sg *SGClient) GetRelease(appName string, compName string) (*client.Release
 		return nil, compGetError(compName, err)
 	}
 
+	fault := false
 	release, err := comp.TargetRelease()
 	if err != nil {
+		fault = true
+	}
+
+	if fault {
 		release, err = comp.CurrentRelease()
 		if err != nil {
 			return nil, errors.New("This Component has no releases.")

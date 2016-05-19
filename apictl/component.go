@@ -122,11 +122,12 @@ func (sg *SGClient) ListComponents(appName string) error {
 	fmt.Fprintln(w, "Name\tContainers\tCluster\tCreate Time\t")
 
 	for _, comp := range list.Items {
-
+		fmt.Println("COMP", comp.Name)
 		release, err := sg.GetRelease(*app.Name, *comp.Name)
 		if err != nil {
 			return err
 		}
+
 		// Get Name, create time
 		compName := *comp.Name
 		createTime := comp.Created.String()

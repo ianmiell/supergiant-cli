@@ -88,7 +88,7 @@ func InstallSGCore(name string, apiVersion string, dashVersion string) error {
 	}
 
 	//Start the dashboard.
-	dash, err := initDash(client, dashVersion, kube)
+	dash, err := initDash(client, dashVersion, kube, false)
 	if err != nil {
 		return err
 	}
@@ -166,7 +166,7 @@ func DestroySGCore(name string) error {
 
 	// Get a list of namespaces.
 	namespaces := client.Namespaces()
-	err = destroyDash(kube)
+	err = destroyDash(kube, false)
 	if err != nil {
 		return err
 	}
@@ -278,7 +278,7 @@ func UpdateDash(name string, version string) error {
 	client := guber.NewClient(kube.IP, kube.User, kube.Pass, true)
 	// destroy old dash
 	fmt.Println("Removing old Dashboard...")
-	err = destroyDash(kube)
+	err = destroyDash(kube, true)
 	if err != nil {
 		fmt.Println("WARN: Dash does not appear to exist. trying to continue.")
 	}
@@ -287,7 +287,7 @@ func UpdateDash(name string, version string) error {
 
 	fmt.Println("Updating dashboard to version: " + version + "...")
 	//Start the dashboard.
-	dash, err := initDash(client, version, kube)
+	dash, err := initDash(client, version, kube, true)
 	if err != nil {
 		return err
 	}
