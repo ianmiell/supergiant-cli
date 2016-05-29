@@ -74,7 +74,7 @@ func Delete() cli.Command {
 					cli.StringFlag{
 						Name:  "app",
 						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
+						Usage: "Name to assign to the new kubernetes cluster.",
 					},
 				},
 			},
@@ -124,7 +124,7 @@ func Delete() cli.Command {
 					cli.StringFlag{
 						Name:  "kube",
 						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
+						Usage: "Name to assign to the new kubernetes cluster.",
 					},
 				},
 				Action: func(c *cli.Context) {
@@ -140,7 +140,7 @@ func Delete() cli.Command {
 						kube = context
 						// if context not set, require.
 						if kube == "" {
-							kube = required(c, "kube", "Kubenretes Cluster Context")
+							kube = required(c, "kube", "Kubernetes Cluster Context")
 						}
 					}
 

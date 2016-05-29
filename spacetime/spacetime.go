@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-// Region contains a map of kuberntes clusters.
+// Region contains a map of kubernetes clusters.
 type Region struct {
 	Kubes map[string]Kube `json:"kubes"`
 }

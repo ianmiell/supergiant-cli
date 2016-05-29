@@ -34,7 +34,7 @@ func Update() cli.Command {
 					cli.StringFlag{
 						Name:  "app",
 						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
+						Usage: "Name to assign to the new kubernetes cluster.",
 					},
 				},
 			},
@@ -73,7 +73,7 @@ func Update() cli.Command {
 						kube = context
 						// if context not set, require.
 						if kube == "" {
-							kube = required(c, "kube", "Kubenretes Cluster Context")
+							kube = required(c, "kube", "Kubernetes Cluster Context")
 						}
 					}
 
