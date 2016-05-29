@@ -136,12 +136,12 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 					cli.StringFlag{
 						Name:  "name, n",
 						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
+						Usage: "Name to assign to the new kubernetes cluster.",
 					},
 					cli.StringFlag{
 						Name:  "version, kv",
 						Value: "1.1.7",
-						Usage: "Version of the new kubernmetes cluster.",
+						Usage: "Version of the new kubernetes cluster.",
 					},
 					cli.StringFlag{
 						Name:   "provider, pvdr",
@@ -158,16 +158,16 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 					cli.StringFlag{
 						Name:  "user, u",
 						Value: "",
-						Usage: "Username to use with your kubermetes cluster.",
+						Usage: "Username to use with your kubernetes cluster.",
 					},
 					cli.StringFlag{
 						Name:  "pass, p",
 						Value: "",
-						Usage: "Password to use with your kubermetes cluster.",
+						Usage: "Password to use with your kubernetes cluster.",
 					},
 					cli.StringFlag{
 						Name:  "avail-zone, az",
-						Value: "us-east-1b",
+						Value: "us-east-1d",
 						Usage: "AWS availability zone where your kubernetes cluster will live.",
 					},
 					cli.StringFlag{
@@ -186,7 +186,7 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 					cli.StringFlag{
 						Name:  "kube",
 						Value: "",
-						Usage: "Name to assign to the new kubernmetes cluster.",
+						Usage: "Name to assign to the new kubernetes cluster.",
 					},
 				},
 				Action: func(c *cli.Context) {
@@ -202,7 +202,7 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 						kube = context
 						// if context not set, require.
 						if kube == "" {
-							kube = required(c, "kube", "Kubenretes Cluster Context")
+							kube = required(c, "kube", "Kubernetes Cluster Context")
 						}
 					}
 					fmt.Println("Kube context is:", kube)
@@ -211,7 +211,7 @@ func Create(apiVersion string, dashVersion string) cli.Command {
 						fmt.Println("Core Install failed: ", err)
 						os.Exit(5)
 					}
-					fmt.Println("Core install Success...")
+					fmt.Println("Core install success...")
 				},
 			},
 
